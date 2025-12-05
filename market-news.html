@@ -89,11 +89,17 @@
             font-size: 0.98rem;
         }
 
+        .news-status {
+            font-size: 0.9rem;
+            color: #44594c;
+            margin-top: 12px;
+        }
+
         .article-list {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            margin-top: 30px;
+            margin-top: 24px;
         }
 
         .article-card {
@@ -114,6 +120,16 @@
             letter-spacing: 0.12em;
             color: #44594c;
             margin-bottom: 8px;
+        }
+
+        .article-snippet {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .article-link {
+            font-size: 0.9rem;
+            text-decoration: underline;
         }
 
         .disclaimer-box {
@@ -179,35 +195,37 @@
         <h1>Market News &amp; Commentary</h1>
         <p>
             Concise written updates on macro data, central bank decisions, sector moves and
-            themes we are monitoring. Entries are chronological; newest first.
+            themes we are monitoring. The feed below shows the latest global financial
+            headlines from multiple sources.
         </p>
 
-        <div class="article-list">
+        <!-- Status line for loading / errors / counts -->
+        <div id="news-status" class="news-status">
+            Loading latest market headlines...
+        </div>
 
+        <!-- Dynamic list populated by JavaScript -->
+        <div class="article-list" id="news-list"></div>
+
+        <!-- You can still keep your own manual commentary below if you want -->
+        <!--
+        <div class="article-list">
             <article class="article-card">
                 <div class="meta">Example • 01 Jan 2026</div>
                 <h3>Monthly Market Roundup – January 2026</h3>
-                <p>
+                <p class="article-snippet">
                     Summary of key index moves, major macro headlines and how we are
                     thinking about risk for our own portfolios this month.
                 </p>
             </article>
-
-            <article class="article-card">
-                <div class="meta">Example • 15 Dec 2025</div>
-                <h3>Central Bank Decision – Our Initial Take</h3>
-                <p>
-                    A brief look at the latest policy decision, what it may mean for
-                    rates-sensitive assets and which parts of the market we are watching.
-                </p>
-            </article>
-
         </div>
+        -->
 
         <div class="disclaimer-box">
-            Market commentary reflects our opinions at the time of writing and may change
-            without notice. It is not a recommendation to take any specific action in the
-            market.
+            Market news is provided via a third-party API and may contain errors or delays.
+            Our commentary reflects our opinions at the time of writing and may change
+            without notice. None of this is a recommendation to take any specific action
+            in the market.
         </div>
     </div>
 </main>
@@ -216,6 +234,113 @@
     © 2025 Green Tree Capital — Educational Only
     <a href="disclaimer.html">Disclaimer</a>
 </footer>
+
+<!-- Marketaux integration -->
+<script>
+    // ⚠️ Replace this with YOUR real API token in your own file
+    const MARKET_AUX_API_TOKEN = "u7jxYOtJLFKQvFrLxwQEzBR4yVe69khpoB9isJbe";
+
+    // Basic query: English articles, mainly US & UK markets, grouped to avoid duplicates
+    const MARKET_AUX_ENDPOINT =
+        "https://api.marketaux.com/v1/news/all" +
+        "?api_token=" + encodeURIComponent(MARKET_AUX_API_TOKEN) +
+        "&language=en" +
+        "&countries=us,gb" +
+        "&group_similar=true" +
+        "&limit=10";
+
+    function formatDate(isoString) {
+        if (!isoString) return "";
+        try {
+            const d = new Date(isoString);
+            return d.toLocaleString("en-GB", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+        } catch (e) {
+            return isoString;
+        }
+    }
+
+    async function loadMarketNews() {
+        const statusEl = document.getElementById("news-status");
+        const listEl = document.getElementById("news-list");
+
+        // Safety check
+        if (!MARKET_AUX_API_TOKEN || MARKET_AUX_API_TOKEN === "YOUR_API_TOKEN_HERE") {
+            statusEl.textContent = "API token not configured. Please update MARKET_AUX_API_TOKEN in the page code.";
+            return;
+        }
+
+        try {
+            const response = await fetch(MARKET_AUX_ENDPOINT);
+            if (!response.ok) {
+                throw new Error("HTTP " + response.status + " " + response.statusText);
+            }
+
+            const data = await response.json();
+            const articles = (data && data.data) ? data.data : [];
+
+            if (!articles.length) {
+                statusEl.textContent = "No news available at the moment. Please check back later.";
+                return;
+            }
+
+            statusEl.textContent = "Showing " + articles.length + " latest headlines";
+
+            // Clear existing list
+            listEl.innerHTML = "";
+
+            articles.forEach(article => {
+                const card = document.createElement("article");
+                card.className = "article-card";
+
+                const source = article.source || "Source";
+                const published = formatDate(article.published_at);
+                const title = article.title || "Untitled article";
+                const snippet =
+                    article.snippet ||
+                    article.description ||
+                    "No summary available.";
+                const url = article.url || "#";
+
+                const metaDiv = document.createElement("div");
+                metaDiv.className = "meta";
+                metaDiv.textContent = source + (published ? " • " + published : "");
+
+                const titleEl = document.createElement("h3");
+                titleEl.textContent = title;
+
+                const snippetEl = document.createElement("p");
+                snippetEl.className = "article-snippet";
+                snippetEl.textContent = snippet;
+
+                const linkEl = document.createElement("a");
+                linkEl.className = "article-link";
+                linkEl.href = url;
+                linkEl.target = "_blank";
+                linkEl.rel = "noopener";
+                linkEl.textContent = "Read full article";
+
+                card.appendChild(metaDiv);
+                card.appendChild(titleEl);
+                card.appendChild(snippetEl);
+                card.appendChild(linkEl);
+
+                listEl.appendChild(card);
+            });
+        } catch (err) {
+            console.error("Error loading Marketaux news:", err);
+            statusEl.textContent =
+                "Unable to load market news right now. Please try again later.";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadMarketNews);
+</script>
 
 </body>
 </html>
