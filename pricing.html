@@ -26,10 +26,10 @@
         color: var(--green-dark);
     }
 
-    /* HEADER (full nav for site) */
+    /* HEADER */
     header {
         background: var(--beige);
-        padding: 18px 32px;
+        padding: 14px 32px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -39,29 +39,33 @@
     .logo {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
     }
 
     .logo img {
-        height: 95px;
+        height: 90px;
     }
 
-    .logo-text {
+    .logo h2 {
+        margin: 0;
+        font-size: 1.1rem;
         text-transform: uppercase;
-        font-weight: bold;
-        letter-spacing: 0.08em;
-        margin-top: 6px;
-        font-size: 1rem;
+        letter-spacing: 0.06em;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 26px;
     }
 
     nav a {
-        margin-left: 22px;
         text-decoration: none;
         font-weight: bold;
         color: var(--green-dark);
+        font-size: 0.95rem;
         padding-bottom: 4px;
         border-bottom: 2px solid transparent;
-        font-size: 0.95rem;
     }
 
     nav a:hover {
@@ -72,13 +76,33 @@
         border-bottom: 2px solid var(--green-dark);
     }
 
+    /* MOBILE HEADER FIX */
+    @media (max-width: 720px) {
+        header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        nav {
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .logo img {
+            height: 70px;
+        }
+    }
+
+    /* PAGE TITLE */
     h1 {
         text-align: center;
         margin-top: 40px;
         font-size: 2.6rem;
     }
 
-    /* Billing Toggle */
+    /* BILLING TOGGLE */
     .billing-toggle {
         text-align: center;
         margin-top: 20px;
@@ -112,8 +136,8 @@
     }
 
     .slider:before {
-        content: "";
         position: absolute;
+        content: "";
         height: 22px;
         width: 22px;
         background: white;
@@ -131,7 +155,7 @@
         transform: translateX(30px);
     }
 
-    /* Pricing Cards */
+    /* PRICING GRID */
     .pricing-grid {
         display: flex;
         justify-content: center;
@@ -190,10 +214,11 @@
     .features li {
         margin-bottom: 12px;
         list-style: none;
+        position: relative;
         font-size: 1rem;
     }
 
-    .features i {
+    .features li i {
         color: var(--green-dark);
         margin-right: 8px;
     }
@@ -219,34 +244,17 @@
         margin-top: 40px;
         border-top: 2px solid var(--green-dark);
     }
-
-    @media(max-width:720px) {
-        header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-
-        .logo img {
-            height: 80px;
-        }
-    }
 </style>
 
 </head>
 
 <body>
 
+<!-- HEADER WITH FULL NAVIGATION -->
 <header>
     <div class="logo">
-        <img src="logo.png" alt="Green Tree Capital Logo">
-        <div class="logo-text">Green Tree Capital</div>
+        <img src="logo.png" alt="Logo">
+        <h2>Green Tree Capital</h2>
     </div>
 
     <nav>
@@ -261,17 +269,17 @@
 
 <h1>Choose Your Plan</h1>
 
-<!-- Billing Toggle -->
+<!-- BILLING TOGGLE -->
 <div class="billing-toggle">
     Monthly
     <label class="toggle-switch">
         <input type="checkbox" id="billingToggle">
         <span class="slider"></span>
     </label>
-    Yearly (-20%)
+    Yearly (20% Discount)
 </div>
 
-<!-- Pricing Grid -->
+<!-- PRICING CARDS -->
 <div class="pricing-grid">
 
     <!-- Tier 1 -->
@@ -333,7 +341,7 @@
 </footer>
 
 <script>
-    // Monthly / Yearly Pricing Toggle
+    // MONTHLY / YEARLY TOGGLE
     const toggle = document.getElementById("billingToggle");
     const prices = document.querySelectorAll(".price");
 
@@ -342,7 +350,7 @@
             const monthly = price.getAttribute("data-month");
             const yearly = price.getAttribute("data-year");
 
-            price.textContent = toggle.checked
+            price.textContent = toggle.checked 
                 ? `$${yearly} / year`
                 : `$${monthly} / month`;
         });
