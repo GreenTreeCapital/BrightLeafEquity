@@ -1,39 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About | Green Tree Capital</title>
+    <!-- same styles as index for consistency -->
+    <style>
+        body { margin:0; font-family:Arial,sans-serif; background:#f3f3e9; color:#1e3a2d; }
+        a { color:#1e3a2d; }
+        header { background:#e8e5d8; padding:16px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #1e3a2d; }
+        .logo { display:flex; align-items:center; gap:12px; }
+        .logo img { height:52px; }
+        .logo-text { text-transform:uppercase; letter-spacing:0.08em; font-size:0.95rem; font-weight:bold; }
+        nav a { text-decoration:none; font-weight:bold; margin-left:18px; color:#1e3a2d; font-size:0.95rem; border-bottom:2px solid transparent; padding-bottom:4px; }
+        nav a:hover { border-bottom:2px solid #2f5745; }
+        nav a.active { border-bottom:2px solid #1e3a2d; }
+        .container { max-width:900px; margin:40px auto 50px; padding:0 20px; }
+        h1 { font-size:2.1rem; margin-bottom:10px; }
+        h2 { margin-top:30px; }
+        p { line-height:1.6; font-size:0.98rem; }
+        ul { font-size:0.97rem; line-height:1.6; }
+        .muted { font-size:0.9rem; color:#44594c; }
+        .disclaimer-box { font-size:0.85rem; line-height:1.5; padding:14px 18px; border:1px solid #1e3a2d; background:#eceadd; margin-top:25px; }
+        footer { text-align:center; padding:14px 20px; border-top:2px solid #1e3a2d; font-size:0.85rem; background:#e8e5d8; }
+        footer a { text-decoration:none; margin-left:8px; }
+        footer a:hover { text-decoration:underline; }
+        @media(max-width:720px){ header{flex-direction:column; align-items:flex-start; gap:10px;} nav a{margin-left:0;margin-right:12px;} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="logo.png" alt="Green Tree Capital Logo">
+        <div class="logo-text">Green Tree Capital</div>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html" class="active">About</a>
+        <a href="market-news.html">Market News</a>
+        <a href="fund-performance.html">Fund Performance</a>
+        <a href="join-discord.html">Join the Discord</a>
+    </nav>
+</header>
+
 <main>
     <div class="container">
-        <section class="section">
-            <h1>About Green Tree Capital</h1>
-            <p>
-                Green Tree Capital is a small, independent project run by two friends who are
-                passionate about sustainable, ethical and long-term investing.
-            </p>
-            <p>
-                We track our own portfolios publicly, share our thinking, and document our wins
-                and mistakes so others can learn alongside us.
-            </p>
-        </section>
+        <h1>About Green Tree Capital</h1>
+        <p>
+            Green Tree Capital is a personal investment journal run by two individual
+            investors who share an interest in sustainable, long-term capital allocation.
+            We are not an investment firm and we do not manage money on behalf of others.
+        </p>
 
-        <section class="section">
-            <h2>What We Are</h2>
-            <ul>
-                <li>A personal investing journal</li>
-                <li>An educational resource about markets and sustainability</li>
-                <li>A community of people learning about finance together</li>
-            </ul>
-        </section>
+        <h2>Our Focus</h2>
+        <ul>
+            <li>Long-term equity investing with an emphasis on quality and resilience</li>
+            <li>Medium-term tactical positioning around macro and valuation shifts</li>
+            <li>Select equity and forex views, always sized and risk-managed carefully</li>
+            <li>Clear written documentation of our thought process and performance</li>
+        </ul>
 
-        <section class="section">
-            <h2>What We Are Not</h2>
-            <ul>
-                <li>We do <strong>not</strong> manage money for others</li>
-                <li>We do <strong>not</strong> provide personalised financial advice</li>
-                <li>We do <strong>not</strong> guarantee any returns</li>
-            </ul>
-        </section>
+        <h2>How to Use This Site</h2>
+        <p>
+            The site is designed for learners who want to understand how a real portfolio
+            is constructed and adjusted over time. You can:
+        </p>
+        <ul>
+            <li>Read <strong>Market News</strong> to see how we interpret major events</li>
+            <li>Review <strong>Fund Performance</strong> charts to track our own progress</li>
+            <li>Join the Discord to see position updates and discuss ideas with others</li>
+        </ul>
+
+        <p class="muted">
+            What you will not find is advice telling you what to do. Your capital, your
+            risk tolerance and your time horizon are unique to you.
+        </p>
 
         <div class="disclaimer-box">
-            We are not financial advisors. Nothing on this site, in our Discord,
-            or in any of our content should be taken as financial, investment, legal or tax advice.
-            Always do your own research and consider speaking to a licensed professional.
+            We are not regulated financial advisors or portfolio managers. All content is
+            based on our personal opinions and experience and is shared strictly for
+            educational and informational purposes.
         </div>
     </div>
 </main>
+
+<footer>
+    © 2025 Green Tree Capital — Educational Only
+    <a href="disclaimer.html">Disclaimer</a>
+</footer>
+
+</body>
+</html>
