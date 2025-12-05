@@ -1,73 +1,292 @@
-<!-- 🔹 HEADER START -->
-<header>
-    <div class="logo">
-        <img src="Images/Logo.png" alt="Market Maven Logo">
-        <span class="logo-text">Market Maven</span>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | Green Tree Capital</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f3f3e9;
+            color: #1e3a2d;
+        }
 
-    <nav>
-        <a href="index.html" class="active">Home</a>
-        <a href="about.html">About</a>
-        <a href="Pricing.html">Pricing</a>
-        <a href="contact.html">Contact</a>
-        <a href="discord.html">Join the Discord</a>
-    </nav>
+        a {
+            color: #1e3a2d;
+        }
+
+        /* ----------------- HEADER FIXED + IMPROVED ------------------ */
+        header {
+            background-color: #e8e5d8;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #1e3a2d;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo img {
+            height: 90px; /* fits cleaner */
+        }
+
+        .logo-text {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 1.05rem;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+
+        nav {
+            display: flex;
+            gap: 42px; /* EVENLY spaced menu */
+        }
+
+        nav a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #1e3a2d;
+            font-size: 1rem;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            border-bottom: 2px solid #2f5745;
+        }
+
+        nav a.active {
+            border-bottom: 2px solid #1e3a2d;
+        }
+
+        /* ------------------------------------------------------------- */
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.7rem;
+            margin-bottom: 10px;
+        }
+
+        .hero .tagline {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            max-width: 720px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #1e3a2d;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.98rem;
+            font-weight: bold;
+            letter-spacing: 0.03em;
+        }
+
+        .btn:hover {
+            background-color: #2f5745;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #1e3a2d;
+            color: #1e3a2d;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e8e5d8;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background-color: #f7f6ec;
+            border: 1px solid #d3d0c0;
+            border-radius: 6px;
+            padding: 18px 20px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .muted {
+            font-size: 0.88rem;
+            color: #44594c;
+        }
+
+        .disclaimer-box {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            padding: 14px 18px;
+            border: 1px solid #1e3a2d;
+            background-color: #eceadd;
+            margin: 40px auto 0;
+            max-width: 900px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 14px 20px;
+            border-top: 2px solid #1e3a2d;
+            font-size: 0.85rem;
+            background-color: #e8e5d8;
+        }
+
+        footer a {
+            text-decoration: none;
+            margin-left: 8px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile layout */
+        @media (max-width: 720px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 18px;
+            }
+
+            .logo img {
+                height: 75px;
+            }
+
+            .hero {
+                padding-top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo">
+            <img src="logo.png" alt="Green Tree Capital Logo">
+            <div class="logo-text">Green Tree Capital</div>
+        </div>
+
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="about.html">About</a>
+            <a href="market-news.html">Market News</a>
+            <a href="fund-performance.html">Fund Performance</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="join-discord.html">Join the Discord</a>
+        </nav>
+    </div>
 </header>
 
-<style>
-/* ===========================
-   HEADER + NAVIGATION STYLING
-   =========================== */
+<main>
+    <section class="hero">
+        <div class="tagline">A Personal, Transparent Investing Journal</div>
+        <h1>Growing Knowledge, Sustainably.</h1>
+        <p>
+            Green Tree Capital is a research-focused project where we share our own
+            portfolio thinking across long-term, medium-term, equity and forex
+            strategies. Everything is documented transparently for education and
+            discussion – not as financial advice.
+        </p>
+        <a class="btn" href="market-news.html">View Market News</a>
+        <a class="btn btn-secondary" href="fund-performance.html">View Fund Performance</a>
 
-header {
-    background-color: #e8e5d8;
-    padding: 12px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #1e3a2d;
-}
+        <div class="disclaimer-box">
+            <strong>Important:</strong> Green Tree Capital is not an investment firm and we are
+            not licensed financial advisors. All content is for educational and informational
+            purposes only and should not be treated as a recommendation to buy or sell any
+            financial instrument.
+        </div>
+    </section>
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
+    <section class="container">
+        <div class="grid">
+            <div class="card">
+                <h3>Structured Portfolios</h3>
+                <p>
+                    We separate our own capital into long-term and medium-term buckets, plus
+                    dedicated equity and forex views. Performance is tracked and updated on a
+                    scheduled basis so you can follow the journey.
+                </p>
+            </div>
 
-.logo img {
-    height: 80px; /* clean, balanced, not oversized */
-}
+            <div class="card">
+                <h3>Clear, Written Commentary</h3>
+                <p>
+                    Market News provides concise written updates on macro events, index moves
+                    and themes we are watching – always in plain English.
+                </p>
+            </div>
 
-.logo-text {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #1e3a2d;
-    margin-top: 6px;
-}
+            <div class="card">
+                <h3>Community Access</h3>
+                <p>
+                    Join the Discord to see positions as they change, with free and paid
+                    tiers depending on how closely you want to follow along.
+                </p>
+            </div>
+        </div>
 
-nav {
-    display: flex;
-    gap: 32px; /* even spacing between links */
-}
+        <p class="muted" style="margin-top:30px;">
+            Nothing on this site or in our community constitutes investment advice, portfolio
+            management or an offer to manage money for others.
+        </p>
+    </section>
+</main>
 
-nav a {
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    color: #1e3a2d;
-    border-bottom: 2px solid transparent;
-    padding-bottom: 4px;
-    transition: 0.2s ease-in-out;
-}
+<footer>
+    © 2025 Green Tree Capital — Educational Only
+    <a href="disclaimer.html">Disclaimer</a>
+</footer>
 
-nav a:hover {
-    border-bottom: 2px solid #2f5745;
-}
-
-nav a.active {
-    border-bottom: 2px solid #1e3a2d;
-}
-</style>
-<!-- 🔹 HEADER END -->
+</body>
+</html>
