@@ -16,7 +16,6 @@
         --beige: #e8e5d8;
         --cream: #f3f3e9;
         --gold: #c4a04a;
-        --soft-gold: #f3ebcf;
     }
 
     body {
@@ -176,7 +175,7 @@
 
     .tier {
         background: #ffffff;
-        width: 270px;
+        width: 260px;
         border-radius: 18px;
         padding: 25px 22px 28px;
         border: 2px solid var(--green-dark);
@@ -325,6 +324,29 @@
         background: var(--green-medium);
     }
 
+    .cfa-wrapper {
+        max-width: 700px;
+        margin: 25px auto 0;
+        padding: 18px 20px;
+        border-radius: 16px;
+        border: 1px dashed var(--green-dark);
+        background: #f7f6ec;
+    }
+
+    .cfa-wrapper h2 {
+        margin-top: 0;
+        font-size: 1.2rem;
+    }
+
+    .cfa-wrapper p {
+        font-size: 0.92rem;
+        margin-bottom: 6px;
+    }
+
+    .cfa-price {
+        font-weight: bold;
+    }
+
     .disclaimer-box {
         font-size: 0.85rem;
         line-height: 1.5;
@@ -403,7 +425,7 @@
 <main class="page-wrapper">
     <h1>Choose Your Plan</h1>
     <p class="page-subtitle">
-        Support the project and unlock more frequent educational messages on markets, forex and portfolio construction.  
+        Support the project and unlock more frequent educational insights on long-term, medium-term and short-term markets.  
         No contracts. Cancel any time.
     </p>
 
@@ -417,7 +439,7 @@
         Yearly (-20%)
     </div>
     <div class="billing-note">
-        Yearly billing applies the discount automatically to the prices shown.
+        Yearly billing applies a 20% discount to the monthly equivalent.
     </div>
 
     <!-- Pricing Grid -->
@@ -428,27 +450,29 @@
             <div class="tier-content">
                 <div class="tier-header-line"></div>
                 <span class="tag-pill">Foundations</span>
-                <h2>Tier 1</h2>
-                <p class="tier-subtitle">For readers who want structured written updates without real-time noise.</p>
+                <h2>Tier 1 – Long-Term Strategy</h2>
+                <p class="tier-subtitle">
+                    For members who want calm, long-term, fundamentals-first insights without daily noise.
+                </p>
 
-                <p class="price" data-month="5" data-year="48">$5 / month</p>
-                <div class="billing-label">Approx. weekly written updates (USD)</div>
+                <p class="price" data-month="4.99" data-year="47.90">£4.99 / month</p>
+                <div class="billing-label">Approx. monthly research cadence</div>
 
                 <div class="section-heading">Inside this tier</div>
                 <ul class="features">
-                    <li><i class="fa-solid fa-newspaper"></i><span><strong>Market recap messages</strong> summarising major moves in indices, rates and key sectors.</span></li>
-                    <li><i class="fa-solid fa-chart-bar"></i><span><strong>Macro highlight notes</strong> on data releases and central bank decisions.</span></li>
-                    <li><i class="fa-solid fa-envelope-open-text"></i><span><strong>Short portfolio diary posts</strong> explaining our own positioning at a high level.</span></li>
+                    <li><i class="fa-solid fa-newspaper"></i><span><strong>Long-term portfolio diary</strong> (ISA-style) with monthly allocation reasoning.</span></li>
+                    <li><i class="fa-solid fa-globe-europe"></i><span><strong>Macro overview</strong> on inflation, rates and growth trends.</span></li>
+                    <li><i class="fa-solid fa-chart-area"></i><span><strong>Sector rotation notes</strong> across major equity themes.</span></li>
                 </ul>
 
                 <div class="section-heading">Discord access</div>
                 <ul class="features">
-                    <li><i class="fa-solid fa-user-group"></i><span>Read-only access to <em>#market-diary</em> and core community channels.</span></li>
-                    <li><i class="fa-solid fa-clock-rotate-left"></i><span>Position summaries shared with a short delay after changes are made.</span></li>
+                    <li><i class="fa-solid fa-user-group"></i><span>Access to long-term discussion channels and community chat.</span></li>
+                    <li><i class="fa-solid fa-clock-rotate-left"></i><span>Educational updates on long-term positioning shared with a delay.</span></li>
                 </ul>
 
                 <p class="tier-footer-note">
-                    Best suited if you want a clean weekly digest to read, rather than live commentary.
+                    Ideal if you are mainly interested in calm, long-term portfolio thinking.
                 </p>
 
                 <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 1</a>
@@ -459,28 +483,30 @@
         <div class="tier">
             <div class="tier-content">
                 <div class="tier-header-line"></div>
-                <span class="tag-pill">FX Focus</span>
-                <h2>Tier 2</h2>
-                <p class="tier-subtitle">For followers who care about the FX tape and shorter-term swings.</p>
+                <span class="tag-pill">Themes & FX</span>
+                <h2>Tier 2 – Medium-Term Ideas</h2>
+                <p class="tier-subtitle">
+                    For members who want a blend of long-term clarity and medium-term thematic activity.
+                </p>
 
-                <p class="price" data-month="7.5" data-year="72">$7.50 / month</p>
-                <div class="billing-label">Multiple touchpoints per week (USD)</div>
+                <p class="price" data-month="9.99" data-year="95.90">£9.99 / month</p>
+                <div class="billing-label">Weekly market and theme commentary</div>
 
                 <div class="section-heading">Inside this tier</div>
                 <ul class="features">
-                    <li><i class="fa-solid fa-newspaper"></i><span>Everything in <strong>Tier 1</strong>, including market recap messages.</span></li>
-                    <li><i class="fa-solid fa-dollar-sign"></i><span><strong>Forex insight posts</strong> covering the major pairs we watch, levels of interest and scenario planning.</span></li>
-                    <li><i class="fa-solid fa-wave-square"></i><span><strong>Short-term tactical views</strong> on indices and FX around major events.</span></li>
+                    <li><i class="fa-solid fa-layer-group"></i><span>Everything in <strong>Tier 1</strong>, plus <strong>medium-term thematic portfolio updates</strong> 1–2x weekly.</span></li>
+                    <li><i class="fa-solid fa-seedling"></i><span><strong>Theme baskets</strong> (AI, energy, biotech, renewables) and our educational rationale.</span></li>
+                    <li><i class="fa-solid fa-sterling-sign"></i><span><strong>FX fundamentals</strong> – macro drivers of major GBP, USD, EUR pairs.</span></li>
+                    <li><i class="fa-solid fa-calendar-week"></i><span><strong>Weekly roadmap</strong> outlining key macro events and what we’re watching.</span></li>
                 </ul>
 
                 <div class="section-heading">Discord access</div>
                 <ul class="features">
-                    <li><i class="fa-solid fa-hashtag"></i><span>Access to a dedicated <em>#fx-and-rates</em> channel for our commentary.</span></li>
-                    <li><i class="fa-solid fa-bell"></i><span>Educational messages when we open or close our own FX positions, with reasoning.</span></li>
+                    <li><i class="fa-solid fa-hashtag"></i><span>Access to <em>#themes</em>, <em>#fx-and-rates</em> and <em>#market-outlook</em> channels.</span></li>
                 </ul>
 
                 <p class="tier-footer-note">
-                    Ideal if you follow currencies and want more colour on why we like or dislike certain pairs.
+                    Best if you want more frequent updates and a stronger focus on themes and FX drivers.
                 </p>
 
                 <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 2</a>
@@ -491,64 +517,83 @@
         <div class="tier best">
             <div class="tier-content">
                 <div class="tier-header-line"></div>
-                <span class="tag-pill">Full Access</span>
-                <h2>Tier 3</h2>
-                <p class="tier-subtitle">Our most complete view of how we build and adjust the overall portfolio.</p>
+                <span class="tag-pill">Active Diary</span>
+                <h2>Tier 3 – Short-Term Education</h2>
+                <p class="tier-subtitle">
+                    For members who want to understand how active traders think – without receiving signals.
+                </p>
 
-                <p class="price" data-month="10" data-year="96">$10 / month</p>
-                <div class="billing-label">Ongoing updates + monthly letter (USD)</div>
+                <p class="price" data-month="15.99" data-year="153.50">£15.99 / month</p>
+                <div class="billing-label">Multiple intraweek diary entries</div>
 
                 <div class="section-heading">Inside this tier</div>
                 <ul class="features">
-                    <li><i class="fa-solid fa-layer-group"></i><span>All content from <strong>Tier 1 &amp; Tier 2</strong>.</span></li>
-                    <li><i class="fa-solid fa-chart-line"></i><span><strong>Portfolio planning messages</strong> explaining allocation shifts across long-term, medium-term, equity and FX sleeves.</span></li>
-                    <li><i class="fa-solid fa-file-alt"></i><span>A more detailed <strong>monthly portfolio letter</strong> covering performance drivers and lessons learned.</span></li>
+                    <li><i class="fa-solid fa-book-open"></i><span>Everything in <strong>Tier 1 &amp; 2</strong>, plus a <strong>short-term FX &amp; equities diary</strong> several times per week.</span></li>
+                    <li><i class="fa-solid fa-chart-line"></i><span><strong>Post-trade breakdowns</strong> – what we saw, why we acted, what we learned (after trades).</span></li>
+                    <li><i class="fa-solid fa-wave-square"></i><span><strong>Volatility &amp; liquidity notes</strong> explaining intraday behaviour.</span></li>
                 </ul>
 
                 <div class="section-heading">Discord access</div>
                 <ul class="features">
-                    <li><i class="fa-solid fa-comments"></i><span>Priority in Q&amp;A threads where we clarify our thinking around trades and risk.</span></li>
-                    <li><i class="fa-solid fa-hourglass-half"></i><span>Earlier access to our own entry/exit commentary (still educational, not trade signals).</span></li>
+                    <li><i class="fa-solid fa-comments"></i><span>Access to <em>#active-diary</em> and <em>#intraday-thoughts</em> channels.</span></li>
+                    <li><i class="fa-solid fa-bell"></i><span>Earlier educational commentary on our own entries/exits (still not real-time signals).</span></li>
                 </ul>
 
                 <p class="tier-footer-note">
-                    Best if you want to follow the full journey: how positions fit together into an overall plan.
+                    Designed to show the reality of short-term trading as a learning tool, not as a gambling feed.
                 </p>
 
                 <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 3</a>
             </div>
         </div>
 
-        <!-- CFA Add-on -->
+        <!-- Tier 4 -->
         <div class="tier">
             <div class="tier-content">
                 <div class="tier-header-line"></div>
-                <span class="tag-pill">Study Add-On</span>
-                <h2>CFA Add-On</h2>
-                <p class="tier-subtitle">Optional study support alongside any main tier.</p>
+                <span class="tag-pill">Full Intelligence</span>
+                <h2>Tier 4 – Portfolio Intelligence</h2>
+                <p class="tier-subtitle">
+                    For members who want the full, hedge-fund-style view of how all the pieces fit together.
+                </p>
 
-                <p class="price" data-month="5" data-year="48">$5 / month</p>
-                <div class="billing-label">Layered on top of another tier (USD)</div>
+                <p class="price" data-month="24.99" data-year="239.90">£24.99 / month</p>
+                <div class="billing-label">Flagship deep-dive experience</div>
 
-                <div class="section-heading">Inside this add-on</div>
+                <div class="section-heading">Inside this tier</div>
                 <ul class="features">
-                    <li><i class="fa-solid fa-book"></i><span><strong>Revision prompts</strong> and accountability messages for upcoming exam windows.</span></li>
-                    <li><i class="fa-solid fa-list-check"></i><span>Shared <strong>topic checklists</strong> and high-level summaries of concepts we found tricky.</span></li>
+                    <li><i class="fa-solid fa-diagram-project"></i><span>Everything in <strong>Tiers 1–3</strong>, plus <strong>full portfolio construction notes</strong> across long, medium and short-term sleeves.</span></li>
+                    <li><i class="fa-solid fa-file-alt"></i><span>A flagship <strong>monthly deep-dive report</strong> with performance drivers and key lessons (educational).</span></li>
+                    <li><i class="fa-solid fa-chess"></i><span><strong>Scenario planning frameworks</strong> for major macro events.</span></li>
                 </ul>
 
                 <div class="section-heading">Discord access</div>
                 <ul class="features">
-                    <li><i class="fa-solid fa-graduation-cap"></i><span>Access to a dedicated <em>#cfa-study</em> discussion channel.</span></li>
+                    <li><i class="fa-solid fa-user-shield"></i><span>Access to a private <em>#portfolio-intelligence</em> channel.</span></li>
+                    <li><i class="fa-solid fa-question-circle"></i><span>Priority responses on questions about process, risk and portfolio design.</span></li>
                 </ul>
 
                 <p class="tier-footer-note">
-                    Designed as a light companion for your own self-study, not a tutoring or exam-prep service.
+                    Our most complete view of how we think about risk, allocation and portfolio structure.
                 </p>
 
-                <a class="btn" href="#" target="_blank" rel="noopener">Add CFA Plan</a>
+                <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 4</a>
             </div>
         </div>
 
+    </div>
+
+    <!-- CFA Add-On -->
+    <div class="cfa-wrapper">
+        <h2>CFA Study Add-On <span class="cfa-price">– £4.49 / month</span></h2>
+        <p>
+            Optional add-on for members preparing for CFA exams. This is not tutoring,
+            but light study support alongside your own self-study.
+        </p>
+        <p>
+            <strong>Includes:</strong> revision prompts, topic checklists, shared notes,
+            and access to a dedicated <em>#cfa-study</em> channel for motivation and discussion.
+        </p>
     </div>
 
     <div class="disclaimer-box">
@@ -556,7 +601,7 @@
         educational content and community access. They do not create a client–advisor
         relationship, do not constitute personalised financial advice and do not
         guarantee any financial returns. All messages, including those covering forex
-        insights and portfolio planning, are for information and education only.
+        insights and portfolio planning, are for informational and educational purposes only.
     </div>
 </main>
 
@@ -576,8 +621,8 @@
             const yearly = price.getAttribute("data-year");
 
             price.textContent = toggle.checked
-                ? `$${yearly} / year`
-                : `$${monthly} / month`;
+                ? `£${yearly} / year`
+                : `£${monthly} / month`;
         });
     });
 </script>
