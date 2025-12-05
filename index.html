@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Green Tree Capital</title>
+    <title>Home | Green Tree Capital</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f3f3e9;
+            color: #1e3a2d;
+        }
+
+        a {
             color: #1e3a2d;
         }
 
@@ -44,116 +48,107 @@
 
         .hero {
             text-align: center;
-            padding: 100px 20px;
+            padding: 80px 20px 40px;
         }
 
         .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
 
         .hero p {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             max-width: 700px;
-            margin: 0 auto 30px;
+            margin: 0 auto 25px;
         }
 
         .btn {
+            display: inline-block;
             background-color: #1e3a2d;
             color: white;
-            padding: 12px 25px;
+            padding: 10px 22px;
             border-radius: 6px;
             text-decoration: none;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .btn:hover {
             background-color: #2f5745;
         }
 
-        /* Policy section styling */
-        .policy {
-            background: #e8e5d8;
-            padding: 50px 20px;
-            border-top: 2px solid #1e3a2d;
-            border-bottom: 2px solid #1e3a2d;
+        .disclaimer-box {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            padding: 15px 20px;
+            border: 1px solid #1e3a2d;
+            background-color: #eceadd;
+            margin: 30px auto 0;
             max-width: 800px;
-            margin: 50px auto;
-            border-radius: 8px;
-        }
-
-        .policy h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .policy p {
-            line-height: 1.6;
-            margin: 15px 0;
         }
 
         footer {
             text-align: center;
-            padding: 20px;
-            margin-top: 60px;
+            padding: 15px 20px;
             border-top: 2px solid #1e3a2d;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <img src="logo.png" alt="Green Tree Capital Logo">
-            <h2>Green Tree Capital</h2>
-        </div>
+<header>
+    <div class="logo">
+        <img src="logo.png" alt="Green Tree Capital Logo">
+        <h2>Green Tree Capital</h2>
+    </div>
 
-        <nav>
-            <a href="#services">Services</a>
-            <a href="#about">About Us</a>
-            <a href="https://discord.gg/mRhAjSqR" target="_blank">Join Discord</a>
-        </nav>
-    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="market-news.html">Market News</a>
+        <a href="equities-forex.html">Equities/Forex</a>
+        <a href="long-term-portfolio.html">Long-Term Portfolio</a>
+        <a href="medium-term-portfolio.html">Medium-Term Portfolio</a>
+        <a href="positions-pnl.html">Open Positions &amp; P&amp;L</a>
+        <a href="strategy.html">Strategy</a>
+        <a href="subscribe.html">Subscribe</a>
+        <a href="https://discord.gg/mRhAjSqR" target="_blank">Discord</a>
+    </nav>
+</header>
 
+<main>
     <section class="hero">
-        <h1>Growing Wealth, Sustainably.</h1>
+        <h1>Growing Knowledge, Sustainably.</h1>
         <p>
-            At Green Tree Capital, we focus on ethical investing, sustainable financial strategies, 
-            and long-term growth. Let us help you build a better financial future.
+            Green Tree Capital is our personal investing journal and education project.
+            We share what we’re doing in the markets, how we think about sustainability,
+            and the lessons we learn along the way.
         </p>
+        <a class="btn" href="market-news.html">Read Market Updates</a>
+        <br><br>
         <a class="btn" href="https://discord.gg/mRhAjSqR" target="_blank">Join Our Discord Community</a>
+
+        <div class="disclaimer-box">
+            <strong>Important:</strong> We are not licensed financial advisors or regulated
+            investment managers. All content on this site is for educational and informational
+            purposes only and should not be taken as financial or investment advice.
+        </div>
     </section>
+</main>
 
-    <!-- POLICY SECTION -->
-    <section class="policy">
-        <h2>📜 Server Policies</h2>
-
-        <p><strong>🔒 SUBSCRIPTION POLICY</strong><br>
-        • All subscriptions to The Trading Floor are non-refundable under any circumstances<br>
-        • Users are responsible for managing their own subscriptions<br>
-        • Failure to cancel before renewal will result in automatic charges (non-refundable)<br>
-        • Cancellation = immediate removal of premium roles/access</p>
-
-        <p><strong>⚖️ BAN POLICY</strong><br>
-        • Banned users forfeit all subscription privileges<br>
-        • No refunds will be issued for bans (regardless of reason)</p>
-
-        <p><strong>📜 CONTENT OWNERSHIP</strong><br>
-        • All posts/content shared in this server become property of The Trading Floor<br>
-        • We reserve the right to use content for:<br>
-        → Educational materials<br>
-        → Marketing purposes<br>
-        → Community growth initiatives<br>
-        • By posting, you automatically consent to these terms</p>
-
-        <p><strong>❗ ACKNOWLEDGEMENT</strong><br>
-        Your continued participation serves as agreement to these policies.</p>
-    </section>
-
-    <footer>
-        © 2025 Green Tree Capital — All Rights Reserved
-    </footer>
+<footer>
+    © 2025 Green Tree Capital — Educational Only
+    <a href="disclaimer.html">Disclaimer</a>
+</footer>
 
 </body>
 </html>
-
