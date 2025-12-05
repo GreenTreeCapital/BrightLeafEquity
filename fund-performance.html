@@ -7,30 +7,136 @@
     <style>
         body { margin:0; font-family:Arial,sans-serif; background:#f3f3e9; color:#1e3a2d; }
         a { color:#1e3a2d; }
-        header { background:#e8e5d8; padding:16px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #1e3a2d; }
-        .logo { display:flex; align-items:center; gap:12px; }
-        .logo img { height:52px; }
-        .logo-text { text-transform:uppercase; letter-spacing:0.08em; font-size:0.95rem; font-weight:bold; }
-        nav a { text-decoration:none; font-weight:bold; margin-left:18px; color:#1e3a2d; font-size:0.95rem; border-bottom:2px solid transparent; padding-bottom:4px; }
-        nav a:hover { border-bottom:2px solid #2f5745; }
-        nav a.active { border-bottom:2px solid #1e3a2d; }
-        .container { max-width:1000px; margin:40px auto 50px; padding:0 20px; }
-        h1 { font-size:2.1rem; margin-bottom:10px; }
-        p { line-height:1.6; font-size:0.98rem; }
-        .chart-wrapper { background:#f7f6ec; border:1px solid #d3d0c0; border-radius:6px; padding:16px 18px; margin-top:25px; }
-        .chart-wrapper h2 { margin-top:0; font-size:1.1rem; }
-        canvas { width:100%; max-height:360px; }
-        table { width:100%; border-collapse:collapse; margin-top:25px; font-size:0.95rem; }
-        th, td { padding:8px 10px; border-bottom:1px solid #d3d0c0; text-align:left; }
-        th { background:#e8e5d8; }
-        .muted { font-size:0.9rem; color:#44594c; margin-top:15px; }
-        .disclaimer-box { font-size:0.85rem; line-height:1.5; padding:14px 18px; border:1px solid #1e3a2d; background:#eceadd; margin-top:30px; }
-        footer { text-align:center; padding:14px 20px; border-top:2px solid #1e3a2d; font-size:0.85rem; background:#e8e5d8; }
-        footer a { text-decoration:none; margin-left:8px; }
-        footer a:hover { text-decoration:underline; }
-        @media(max-width:720px){ header{flex-direction:column; align-items:flex-start; gap:10px;} nav a{margin-left:0;margin-right:12px;} }
+
+        /* Header */
+        header { 
+            background:#e8e5d8; 
+            padding:16px 32px; 
+            display:flex; 
+            justify-content:space-between; 
+            align-items:center; 
+            border-bottom:2px solid #1e3a2d; 
+        }
+        .logo { 
+            display:flex; 
+            align-items:center; 
+            gap:12px; 
+        }
+        .logo img { 
+            height:120px; 
+        }
+        .logo-text { 
+            text-transform:uppercase; 
+            letter-spacing:0.08em; 
+            font-size:0.95rem; 
+            font-weight:bold; 
+        }
+
+        nav a { 
+            text-decoration:none; 
+            font-weight:bold; 
+            margin-left:18px; 
+            color:#1e3a2d; 
+            font-size:0.95rem; 
+            border-bottom:2px solid transparent; 
+            padding-bottom:4px; 
+        }
+        nav a:hover { 
+            border-bottom:2px solid #2f5745; 
+        }
+        nav a.active { 
+            border-bottom:2px solid #1e3a2d; 
+        }
+
+        /* Layout */
+        .container { 
+            max-width:1000px; 
+            margin:40px auto 50px; 
+            padding:0 20px; 
+        }
+        h1 { 
+            font-size:2.1rem; 
+            margin-bottom:10px; 
+        }
+        p { 
+            line-height:1.6; 
+            font-size:0.98rem; 
+        }
+
+        .chart-wrapper { 
+            background:#f7f6ec; 
+            border:1px solid #d3d0c0; 
+            border-radius:6px; 
+            padding:16px 18px; 
+            margin-top:25px; 
+        }
+        .chart-wrapper h2 { 
+            margin-top:0; 
+            font-size:1.1rem; 
+        }
+        canvas { 
+            width:100%; 
+            max-height:360px; 
+        }
+
+        table { 
+            width:100%; 
+            border-collapse:collapse; 
+            margin-top:25px; 
+            font-size:0.95rem; 
+        }
+        th, td { 
+            padding:8px 10px; 
+            border-bottom:1px solid #d3d0c0; 
+            text-align:left; 
+        }
+        th { 
+            background:#e8e5d8; 
+        }
+        .muted { 
+            font-size:0.9rem; 
+            color:#44594c; 
+            margin-top:15px; 
+        }
+
+        .disclaimer-box { 
+            font-size:0.85rem; 
+            line-height:1.5; 
+            padding:14px 18px; 
+            border:1px solid #1e3a2d; 
+            background:#eceadd; 
+            margin-top:30px; 
+        }
+
+        footer { 
+            text-align:center; 
+            padding:14px 20px; 
+            border-top:2px solid #1e3a2d; 
+            font-size:0.85rem; 
+            background:#e8e5d8; 
+        }
+        footer a { 
+            text-decoration:none; 
+            margin-left:8px; 
+        }
+        footer a:hover { 
+            text-decoration:underline; 
+        }
+
+        @media(max-width:720px){
+            header{
+                flex-direction:column; 
+                align-items:flex-start; 
+                gap:10px;
+            }
+            nav a{
+                margin-left:0;
+                margin-right:12px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
 <header>
@@ -40,32 +146,36 @@
     </div>
 
     <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="market-news.html">Market News</a>
-        <a href="fund-performance.html" class="active">Fund Performance</a>
-        <a href="join-discord.html">Join the Discord</a>
+        <a href="index.html" class="nav-home">Home</a>
+        <a href="about.html" class="nav-about">About</a>
+        <a href="market-news.html" class="nav-news">Market News</a>
+        <a href="fund-performance.html" class="nav-fund active">Fund Performance</a>
+        <a href="pricing.html" class="nav-pricing">Pricing</a>
+        <a href="join-discord.html" class="nav-discord">Join the Discord</a>
     </nav>
 </header>
 
 <main>
     <div class="container">
+
         <h1>Fund Performance Overview</h1>
         <p>
             The charts and tables below track the performance of our own portfolios:
-            long-term, medium-term, equity-focused and forex-focused sleeves. Values
-            are updated on a scheduled basis, typically weekly.
+            long-term, medium-term, equity-focused and forex sleeves. Values are updated
+            weekly or as material changes occur.
         </p>
 
+        <!-- Performance Chart -->
         <div class="chart-wrapper">
             <h2>Weekly Performance (Example Data)</h2>
             <canvas id="performanceChart"></canvas>
             <p class="muted">
-                Figures represent percentage change from an initial value of 100.
-                Update the data series in the code as new weekly figures become available.
+                Figures represent percentage change from an initial index value of 100.
+                Replace the data arrays in the script as you update weekly performance.
             </p>
         </div>
 
+        <!-- Table -->
         <table>
             <thead>
                 <tr>
@@ -80,35 +190,35 @@
                     <td>Long-Term Fund</td>
                     <td>105.2</td>
                     <td>+5.2%</td>
-                    <td>Example figures – replace with your own.</td>
+                    <td>Example figures — replace with your own.</td>
                 </tr>
                 <tr>
                     <td>Medium-Term Fund</td>
                     <td>102.3</td>
                     <td>+2.3%</td>
-                    <td>More active risk, shorter horizon.</td>
+                    <td>More active risk, shorter durations.</td>
                 </tr>
                 <tr>
                     <td>Equity Portfolio</td>
                     <td>107.8</td>
                     <td>+7.8%</td>
-                    <td>Stock-specific positions only.</td>
+                    <td>Long-only equity ideas.</td>
                 </tr>
                 <tr>
                     <td>Forex Portfolio</td>
                     <td>99.1</td>
                     <td>-0.9%</td>
-                    <td>Includes realised and unrealised P&amp;L.</td>
+                    <td>Includes realised &amp; unrealised P&amp;L.</td>
                 </tr>
             </tbody>
         </table>
 
         <div class="disclaimer-box">
-            Performance shown here is based on our internal tracking of our own capital
-            and may include estimates. Past performance is not indicative of future
-            results. This information is provided for transparency and educational
-            purposes only and should not be relied upon for investment decisions.
+            Performance is based on internal tracking of our own capital and may include
+            estimates. Past performance is not a reliable indicator of future results.
+            Educational purposes only — not financial advice.
         </div>
+
     </div>
 </main>
 
@@ -117,13 +227,11 @@
     <a href="disclaimer.html">Disclaimer</a>
 </footer>
 
-<!-- Chart.js CDN and simple configuration -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Example weekly labels
     const labels = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"];
 
-    // Example data – replace with your real weekly index values
     const longTermData   = [100, 100.5, 101, 102, 103.5, 105.2];
     const mediumTermData = [100, 99.8, 100.2, 101, 101.8, 102.3];
     const equityData     = [100, 101.2, 102.5, 104, 106, 107.8];
@@ -136,44 +244,16 @@
         data: {
             labels: labels,
             datasets: [
-                {
-                    label: "Long-Term Fund",
-                    data: longTermData,
-                    tension: 0.25,
-                    borderWidth: 2
-                },
-                {
-                    label: "Medium-Term Fund",
-                    data: mediumTermData,
-                    tension: 0.25,
-                    borderWidth: 2
-                },
-                {
-                    label: "Equity Portfolio",
-                    data: equityData,
-                    tension: 0.25,
-                    borderWidth: 2
-                },
-                {
-                    label: "Forex Portfolio",
-                    data: forexData,
-                    tension: 0.25,
-                    borderWidth: 2
-                }
+                { label:"Long-Term Fund",     data:longTermData,   tension:0.25, borderWidth:2 },
+                { label:"Medium-Term Fund",   data:mediumTermData, tension:0.25, borderWidth:2 },
+                { label:"Equity Portfolio",   data:equityData,     tension:0.25, borderWidth:2 },
+                { label:"Forex Portfolio",    data:forexData,      tension:0.25, borderWidth:2 }
             ]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: {
-                    position: "bottom"
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false
-                }
-            }
+            plugins: { legend: { position:"bottom" } },
+            scales: { y: { beginAtZero:false } }
         }
     });
 </script>
