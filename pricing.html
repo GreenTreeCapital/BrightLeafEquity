@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-    /* BRAND COLOURS */
     :root {
         --green-dark: #1e3a2d;
         --green-medium: #2f5745;
@@ -26,46 +25,55 @@
         color: var(--green-dark);
     }
 
-    /* HEADER */
+    a {
+        color: var(--green-dark);
+    }
+
+    /* ---------- SHARED HEADER (same as other pages) ---------- */
     header {
-        background: var(--beige);
-        padding: 14px 32px;
+        background-color: var(--beige);
+        padding: 16px 40px;
+        border-bottom: 2px solid var(--green-dark);
+    }
+
+    .header-inner {
+        max-width: 1400px;
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 2px solid var(--green-dark);
     }
 
     .logo {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 16px;
     }
 
     .logo img {
         height: 90px;
     }
 
-    .logo h2 {
-        margin: 0;
-        font-size: 1.1rem;
+    .logo-text {
         text-transform: uppercase;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.08em;
+        font-size: 1.05rem;
+        font-weight: bold;
+        margin-top: 4px;
     }
 
     nav {
         display: flex;
-        align-items: center;
-        gap: 26px;
+        gap: 42px;
     }
 
     nav a {
         text-decoration: none;
         font-weight: bold;
         color: var(--green-dark);
-        font-size: 0.95rem;
-        padding-bottom: 4px;
+        font-size: 1rem;
         border-bottom: 2px solid transparent;
+        padding-bottom: 5px;
     }
 
     nav a:hover {
@@ -75,38 +83,32 @@
     nav a.active {
         border-bottom: 2px solid var(--green-dark);
     }
+    /* ---------------------------------------------------------- */
 
-    /* MOBILE HEADER FIX */
-    @media (max-width: 720px) {
-        header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 20px;
-        }
-
-        nav {
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .logo img {
-            height: 70px;
-        }
+    .page-wrapper {
+        max-width: 1100px;
+        margin: 40px auto 50px;
+        padding: 0 20px;
     }
 
-    /* PAGE TITLE */
     h1 {
         text-align: center;
-        margin-top: 40px;
         font-size: 2.6rem;
+        margin-bottom: 10px;
     }
 
-    /* BILLING TOGGLE */
+    .page-subtitle {
+        text-align: center;
+        font-size: 0.98rem;
+        color: #44594c;
+        margin-bottom: 25px;
+    }
+
+    /* Billing Toggle */
     .billing-toggle {
         text-align: center;
-        margin-top: 20px;
-        font-size: 1.2rem;
+        margin-top: 10px;
+        font-size: 1.05rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -136,8 +138,8 @@
     }
 
     .slider:before {
-        position: absolute;
         content: "";
+        position: absolute;
         height: 22px;
         width: 22px;
         background: white;
@@ -155,17 +157,24 @@
         transform: translateX(30px);
     }
 
-    /* PRICING GRID */
+    .billing-note {
+        text-align: center;
+        font-size: 0.85rem;
+        color: #44594c;
+        margin-top: 8px;
+    }
+
+    /* Pricing Cards */
     .pricing-grid {
         display: flex;
         justify-content: center;
         gap: 25px;
-        padding: 40px 20px;
+        padding: 40px 0 10px;
         flex-wrap: wrap;
     }
 
     .tier {
-        background: white;
+        background: #ffffff;
         width: 270px;
         border-radius: 18px;
         padding: 25px;
@@ -178,12 +187,24 @@
 
     .tier:hover {
         transform: translateY(-12px);
-        box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .tier h2 {
+        margin-top: 6px;
+        margin-bottom: 4px;
+        font-size: 1.3rem;
+    }
+
+    .tier-subtitle {
+        font-size: 0.9rem;
+        color: #44594c;
+        margin-bottom: 10px;
     }
 
     .best {
         border-color: var(--gold);
-        box-shadow: 0 0 14px rgba(196,160,74,0.6);
+        box-shadow: 0 0 14px rgba(196, 160, 74, 0.6);
     }
 
     .best::before {
@@ -203,46 +224,96 @@
     .price {
         font-size: 2rem;
         font-weight: bold;
-        margin: 10px 0 20px;
+        margin: 10px 0 5px;
+    }
+
+    .billing-label {
+        font-size: 0.85rem;
+        color: #44594c;
+        margin-bottom: 15px;
     }
 
     .features {
         text-align: left;
-        padding-left: 20px;
+        padding-left: 8px;
+        margin-top: 10px;
     }
 
     .features li {
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         list-style: none;
-        position: relative;
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
-    .features li i {
+    .features i {
         color: var(--green-dark);
         margin-right: 8px;
+        width: 16px;
+        text-align: center;
     }
 
     .btn {
         background: var(--green-dark);
         color: white;
-        padding: 12px 20px;
+        padding: 11px 20px;
         text-decoration: none;
         border-radius: 6px;
         display: inline-block;
         font-weight: bold;
-        margin-top: 20px;
+        margin-top: 18px;
+        font-size: 0.95rem;
     }
 
     .btn:hover {
         background: var(--green-medium);
     }
 
+    .disclaimer-box {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        padding: 14px 18px;
+        border: 1px solid var(--green-dark);
+        background: #eceadd;
+        margin-top: 25px;
+    }
+
     footer {
         text-align: center;
-        padding: 20px;
-        margin-top: 40px;
+        padding: 14px 20px;
+        margin-top: 30px;
         border-top: 2px solid var(--green-dark);
+        font-size: 0.85rem;
+        background: var(--beige);
+    }
+
+    footer a {
+        text-decoration: none;
+        margin-left: 8px;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media(max-width: 720px) {
+        header {
+            padding: 16px 20px;
+        }
+
+        .header-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        nav {
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .logo img {
+            height: 80px;
+        }
     }
 </style>
 
@@ -250,98 +321,128 @@
 
 <body>
 
-<!-- HEADER WITH FULL NAVIGATION -->
 <header>
-    <div class="logo">
-        <img src="logo.png" alt="Logo">
-        <h2>Green Tree Capital</h2>
-    </div>
+    <div class="header-inner">
+        <div class="logo">
+            <img src="logo.png" alt="Green Tree Capital Logo">
+            <div class="logo-text">Green Tree Capital</div>
+        </div>
 
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="market-news.html">Market News</a>
-        <a href="fund-performance.html">Fund Performance</a>
-        <a href="pricing.html" class="active">Pricing</a>
-        <a href="join-discord.html">Join the Discord</a>
-    </nav>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="market-news.html">Market News</a>
+            <a href="fund-performance.html">Fund Performance</a>
+            <a href="pricing.html" class="active">Pricing</a>
+            <a href="join-discord.html">Join the Discord</a>
+        </nav>
+    </div>
 </header>
 
-<h1>Choose Your Plan</h1>
+<main class="page-wrapper">
+    <h1>Choose Your Plan</h1>
+    <p class="page-subtitle">
+        Support the project and unlock more frequent educational updates.  
+        No contracts. Cancel any time.
+    </p>
 
-<!-- BILLING TOGGLE -->
-<div class="billing-toggle">
-    Monthly
-    <label class="toggle-switch">
-        <input type="checkbox" id="billingToggle">
-        <span class="slider"></span>
-    </label>
-    Yearly (20% Discount)
-</div>
-
-<!-- PRICING CARDS -->
-<div class="pricing-grid">
-
-    <!-- Tier 1 -->
-    <div class="tier">
-        <h2>Tier 1</h2>
-        <p class="price" data-month="5" data-year="48">$5 / month</p>
-
-        <ul class="features">
-            <li><i class="fa-solid fa-newspaper"></i>Market news updates</li>
-        </ul>
-
-        <a class="btn" href="#" target="_blank">Join Tier 1</a>
+    <!-- Billing Toggle -->
+    <div class="billing-toggle">
+        Monthly
+        <label class="toggle-switch">
+            <input type="checkbox" id="billingToggle">
+            <span class="slider"></span>
+        </label>
+        Yearly (-20%)
+    </div>
+    <div class="billing-note">
+        Yearly billing applies the discount automatically to the prices shown.
     </div>
 
-    <!-- Tier 2 -->
-    <div class="tier">
-        <h2>Tier 2</h2>
-        <p class="price" data-month="7.5" data-year="72">$7.50 / month</p>
+    <!-- Pricing Grid -->
+    <div class="pricing-grid">
 
-        <ul class="features">
-            <li><i class="fa-solid fa-newspaper"></i>Market news updates</li>
-            <li><i class="fa-solid fa-dollar-sign"></i>Forex insights</li>
-        </ul>
+        <!-- Tier 1 -->
+        <div class="tier">
+            <h2>Tier 1</h2>
+            <p class="tier-subtitle">For readers who want structured written updates.</p>
+            <p class="price" data-month="5" data-year="48">$5 / month</p>
+            <div class="billing-label">Billed monthly (USD)</div>
 
-        <a class="btn" href="#" target="_blank">Join Tier 2</a>
+            <ul class="features">
+                <li><i class="fa-solid fa-newspaper"></i>Regular market news summaries</li>
+                <li><i class="fa-solid fa-list-ul"></i>Key macro and index highlights</li>
+                <li><i class="fa-solid fa-user-group"></i>Access to Tier 1 Discord channels</li>
+            </ul>
+
+            <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 1</a>
+        </div>
+
+        <!-- Tier 2 -->
+        <div class="tier">
+            <h2>Tier 2</h2>
+            <p class="tier-subtitle">For followers who want more detail and FX focus.</p>
+            <p class="price" data-month="7.5" data-year="72">$7.50 / month</p>
+            <div class="billing-label">Billed monthly (USD)</div>
+
+            <ul class="features">
+                <li><i class="fa-solid fa-newspaper"></i>All Tier 1 market news content</li>
+                <li><i class="fa-solid fa-dollar-sign"></i>Forex and rates commentary</li>
+                <li><i class="fa-solid fa-clock"></i>More frequent intramonth updates</li>
+            </ul>
+
+            <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 2</a>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="tier best">
+            <h2>Tier 3</h2>
+            <p class="tier-subtitle">Full access for those closely following our journey.</p>
+            <p class="price" data-month="10" data-year="96">$10 / month</p>
+            <div class="billing-label">Billed monthly (USD)</div>
+
+            <ul class="features">
+                <li><i class="fa-solid fa-newspaper"></i>All Tier 1 &amp; 2 content</li>
+                <li><i class="fa-solid fa-chart-line"></i>Deeper portfolio breakdowns</li>
+                <li><i class="fa-solid fa-comments"></i>Priority Q&amp;A in Discord</li>
+            </ul>
+
+            <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 3</a>
+        </div>
+
+        <!-- CFA Add-on -->
+        <div class="tier">
+            <h2>CFA Add-On</h2>
+            <p class="tier-subtitle">Optional study support alongside any tier.</p>
+            <p class="price" data-month="5" data-year="48">$5 / month</p>
+            <div class="billing-label">Billed monthly (USD)</div>
+
+            <ul class="features">
+                <li><i class="fa-solid fa-book"></i>Access to CFA study discussion channels</li>
+                <li><i class="fa-solid fa-list-check"></i>Shared revision checklists and notes</li>
+                <li><i class="fa-solid fa-plus"></i>Can be added to any main tier</li>
+            </ul>
+
+            <a class="btn" href="#" target="_blank" rel="noopener">Add CFA Plan</a>
+        </div>
+
     </div>
 
-    <!-- Tier 3 -->
-    <div class="tier best">
-        <h2>Tier 3</h2>
-        <p class="price" data-month="10" data-year="96">$10 / month</p>
-
-        <ul class="features">
-            <li><i class="fa-solid fa-newspaper"></i>Market news updates</li>
-            <li><i class="fa-solid fa-dollar-sign"></i>Forex insights</li>
-            <li><i class="fa-solid fa-chart-line"></i>Portfolio planning</li>
-        </ul>
-
-        <a class="btn" href="#" target="_blank">Join Tier 3</a>
+    <div class="disclaimer-box">
+        Subscriptions support the Green Tree Capital project and provide additional
+        educational content and community access. They do not create a client–advisor
+        relationship, do not constitute personalised financial advice and do not
+        guarantee any financial returns.
     </div>
-
-    <!-- CFA Add-on -->
-    <div class="tier">
-        <h2>CFA Add-On</h2>
-        <p class="price" data-month="5" data-year="48">$5 / month</p>
-
-        <ul class="features">
-            <li><i class="fa-solid fa-book"></i>Revision support</li>
-            <li><i class="fa-solid fa-plus"></i>Add to any tier</li>
-        </ul>
-
-        <a class="btn" href="#" target="_blank">Add CFA Plan</a>
-    </div>
-
-</div>
+</main>
 
 <footer>
-    © 2025 Green Tree Capital — All Rights Reserved
+    © 2025 Green Tree Capital — Educational Only
+    <a href="disclaimer.html">Disclaimer</a>
 </footer>
 
 <script>
-    // MONTHLY / YEARLY TOGGLE
+    // Monthly / Yearly Pricing Toggle
     const toggle = document.getElementById("billingToggle");
     const prices = document.querySelectorAll(".price");
 
@@ -350,7 +451,7 @@
             const monthly = price.getAttribute("data-month");
             const yearly = price.getAttribute("data-year");
 
-            price.textContent = toggle.checked 
+            price.textContent = toggle.checked
                 ? `$${yearly} / year`
                 : `$${monthly} / month`;
         });
