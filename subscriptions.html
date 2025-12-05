@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscriptions – Green Tree Capital</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f3f3e9;
+            color: #1e3a2d;
+        }
+
+        header {
+            background-color: #e8e5d8;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #1e3a2d;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            height: 70px;
+        }
+
+        nav a {
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            color: #1e3a2d;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .pricing-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 60px auto;
+            max-width: 1200px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: white;
+            width: 260px;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #1e3a2d;
+            text-align: center;
+        }
+
+        .card h2 {
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .card p.price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        ul.features {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        ul.features li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        ul.features li::before {
+            content: "✔";
+            position: absolute;
+            left: 0;
+            color: #1e3a2d;
+        }
+
+        .btn {
+            background-color: #1e3a2d;
+            color: white;
+            padding: 12px 20px;
+            display: inline-block;
+            border-radius: 6px;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #2f5745;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+            border-top: 2px solid #1e3a2d;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="logo.png" alt="Green Tree Capital Logo">
+        <h2>Green Tree Capital</h2>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="subscriptions.html">Subscriptions</a>
+        <a href="https://discord.gg/mRhAjSqR" target="_blank">Join Discord</a>
+    </nav>
+</header>
+
+<h1 style="text-align:center; margin-top:40px;">Subscription Plans</h1>
+
+<div class="pricing-container">
+
+    <!-- Tier 1 -->
+    <div class="card">
+        <h2>Tier 1</h2>
+        <p class="price">$5 / month</p>
+        <ul class="features">
+            <li>Market news updates</li>
+        </ul>
+        <a class="btn" href="https://discord.gg/mRhAjSqR" target="_blank">Join Tier 1</a>
+    </div>
+
+    <!-- Tier 2 -->
+    <div class="card">
+        <h2>Tier 2</h2>
+        <p class="price">$7.50 / month</p>
+        <ul class="features">
+            <li>Market news updates</li>
+            <li>Forex insights</li>
+        </ul>
+        <a class="btn" href="https://discord.gg/mRhAjSqR" target="_blank">Join Tier 2</a>
+    </div>
+
+    <!-- Tier 3 -->
+    <div class="card">
+        <h2>Tier 3</h2>
+        <p class="price">$10 / month</p>
+        <ul class="features">
+            <li>Market news updates</li>
+            <li>Forex insights</li>
+            <li>Portfolio planning</li>
+        </ul>
+        <a class="btn" href="https://discord.gg/mRhAjSqR" target="_blank">Join Tier 3</a>
+    </div>
+
+    <!-- Add-on -->
+    <div class="card" style="border-color:#6b4f1b;">
+        <h2>CFA Add-On</h2>
+        <p class="price">$5 / month</p>
+        <ul class="features">
+            <li>Revision support</li>
+            <li>Can be added to any tier</li>
+        </ul>
+        <a class="btn" href="https://discord.gg/mRhAjSqR" target="_blank">Add CFA Option</a>
+    </div>
+
+</div>
+
+<footer>
+    © 2025 Green Tree Capital — All Rights Reserved
+</footer>
+
+</body>
+</html>
