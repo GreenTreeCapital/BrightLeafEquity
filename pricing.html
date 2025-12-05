@@ -3,258 +3,149 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pricing | Green Tree Capital</title>
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Fund Performance | Green Tree Capital</title>
 
     <style>
-        :root {
-            --green-dark: #1e3a2d;
-            --green-medium: #2f5745;
-            --beige: #e8e5d8;
-            --cream: #f3f3e9;
-            --gold: #c4a04a;
-        }
-
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: var(--cream);
-            color: var(--green-dark);
+            background: #f3f3e9;
+            color: #1e3a2d;
         }
 
         a {
-            color: var(--green-dark);
+            color: #1e3a2d;
         }
 
+        /* ---------- UNIFIED HEADER ---------- */
         header {
-            background-color: var(--beige);
-            padding: 16px 32px;
+            background-color: #e8e5d8;
+            padding: 16px 40px;
+            border-bottom: 2px solid #1e3a2d;
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--green-dark);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
         }
 
         .logo img {
-            height: 120px;
+            height: 90px;
         }
 
         .logo-text {
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             font-weight: bold;
+            margin-top: 4px;
+        }
+
+        nav {
+            display: flex;
+            gap: 42px;
         }
 
         nav a {
             text-decoration: none;
             font-weight: bold;
-            margin-left: 18px;
-            color: var(--green-dark);
-            font-size: 0.95rem;
+            color: #1e3a2d;
+            font-size: 1rem;
             border-bottom: 2px solid transparent;
-            padding-bottom: 4px;
+            padding-bottom: 5px;
         }
 
         nav a:hover {
-            border-bottom: 2px solid var(--green-medium);
+            border-bottom: 2px solid #2f5745;
         }
 
         nav a.active {
-            border-bottom: 2px solid var(--green-dark);
+            border-bottom: 2px solid #1e3a2d;
         }
 
-        .page-hero {
-            text-align: center;
-            padding: 60px 20px 20px;
+        /* ---------- PAGE CONTENT ---------- */
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto 50px;
+            padding: 0 20px;
         }
 
-        .page-hero h1 {
-            font-size: 2.4rem;
+        h1 {
+            font-size: 2.1rem;
             margin-bottom: 10px;
         }
 
-        .page-hero p {
-            max-width: 700px;
-            margin: 0 auto;
-            font-size: 1rem;
+        p {
             line-height: 1.6;
+            font-size: 0.98rem;
         }
 
-        /* Billing toggle */
-        .billing-toggle {
-            text-align: center;
+        .chart-wrapper {
+            background: #f7f6ec;
+            border: 1px solid #d3d0c0;
+            border-radius: 6px;
+            padding: 16px 18px;
             margin-top: 25px;
-            font-size: 1.05rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
         }
 
-        .toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 30px;
+        .chart-wrapper h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
         }
 
-        .toggle-switch input {
-            display: none;
+        canvas {
+            width: 100%;
+            max-height: 360px;
         }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            background-color: var(--green-dark);
-            border-radius: 30px;
-            inset: 0;
-            transition: 0.3s;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            background: white;
-            border-radius: 50%;
-            left: 4px;
-            bottom: 4px;
-            transition: 0.3s;
-        }
-
-        input:checked + .slider {
-            background-color: var(--gold);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(30px);
-        }
-
-        /* Pricing cards */
-        .pricing-grid {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            padding: 40px 20px 10px;
-            flex-wrap: wrap;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .tier {
-            background: #ffffff;
-            width: 270px;
-            border-radius: 18px;
-            padding: 25px;
-            border: 2px solid var(--green-dark);
-            text-align: center;
-            transition: 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tier:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-        }
-
-        .tier h2 {
-            margin-top: 8px;
-            margin-bottom: 4px;
-        }
-
-        .tier small {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: #44594c;
-        }
-
-        .best {
-            border-color: var(--gold);
-            box-shadow: 0 0 14px rgba(196,160,74,0.5);
-        }
-
-        .best::before {
-            content: "MOST POPULAR";
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--gold);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.75rem;
-        }
-
-        .price {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 12px 0 18px;
-        }
-
-        .features {
-            text-align: left;
-            padding-left: 0;
-            list-style: none;
-            margin: 0;
-        }
-
-        .features li {
-            margin-bottom: 10px;
-            font-size: 0.96rem;
-        }
-
-        .features li i {
-            color: var(--green-dark);
-            margin-right: 8px;
-        }
-
-        .btn {
-            background: var(--green-dark);
-            color: white;
-            padding: 10px 18px;
-            text-decoration: none;
-            border-radius: 6px;
-            display: inline-block;
-            font-weight: bold;
-            margin-top: 18px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
             font-size: 0.95rem;
-            letter-spacing: 0.03em;
         }
 
-        .btn:hover {
-            background: var(--green-medium);
+        th, td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #d3d0c0;
+            text-align: left;
+        }
+
+        th {
+            background: #e8e5d8;
+        }
+
+        .muted {
+            font-size: 0.9rem;
+            color: #44594c;
+            margin-top: 15px;
         }
 
         .disclaimer-box {
-            max-width: 900px;
-            margin: 30px auto 0;
-            padding: 14px 18px;
-            background: #eceadd;
-            border: 1px solid var(--green-dark);
             font-size: 0.85rem;
             line-height: 1.5;
+            padding: 14px 18px;
+            border: 1px solid #1e3a2d;
+            background: #eceadd;
+            margin-top: 30px;
         }
 
         footer {
             text-align: center;
             padding: 14px 20px;
-            margin-top: 30px;
-            border-top: 2px solid var(--green-dark);
+            border-top: 2px solid #1e3a2d;
             font-size: 0.85rem;
-            background-color: var(--beige);
+            background: #e8e5d8;
         }
 
         footer a {
@@ -267,126 +158,102 @@
         }
 
         @media (max-width: 720px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+            nav {
+                flex-wrap: wrap;
+                gap: 18px;
             }
 
-            nav a {
-                margin-left: 0;
-                margin-right: 12px;
+            .logo img {
+                height: 75px;
             }
         }
     </style>
 </head>
+
 <body>
 
 <header>
-    <div class="logo">
-        <img src="logo.png" alt="Green Tree Capital Logo">
-        <div class="logo-text">Green Tree Capital</div>
-    </div>
+    <div class="header-inner">
+        <div class="logo">
+            <img src="logo.png" alt="Green Tree Capital Logo">
+            <div class="logo-text">Green Tree Capital</div>
+        </div>
 
-    <nav>
-        <a href="index.html" class="nav-home">Home</a>
-        <a href="about.html" class="nav-about">About</a>
-        <a href="market-news.html" class="nav-news">Market News</a>
-        <a href="fund-performance.html" class="nav-fund">Fund Performance</a>
-        <a href="pricing.html" class="nav-pricing active">Pricing</a>
-        <a href="join-discord.html" class="nav-discord">Join the Discord</a>
-    </nav>
+        <nav>
+            <a href="index.html" class="nav-home">Home</a>
+            <a href="about.html" class="nav-about">About</a>
+            <a href="market-news.html" class="nav-news">Market News</a>
+            <a href="fund-performance.html" class="nav-fund active">Fund Performance</a>
+            <a href="pricing.html" class="nav-pricing">Pricing</a>
+            <a href="join-discord.html" class="nav-discord">Join the Discord</a>
+        </nav>
+    </div>
 </header>
 
 <main>
-    <section class="page-hero">
-        <h1>Choose Your Plan</h1>
+    <div class="container">
+
+        <h1>Fund Performance Overview</h1>
         <p>
-            Subscriptions support the time we spend researching markets and documenting our
-            own investing journey. All tiers provide educational content only – never
-            personalised financial advice.
+            The charts and tables below track the performance of our own portfolios:
+            long-term, medium-term, equity-focused and forex sleeves. Values are updated
+            weekly or as material changes occur.
         </p>
-    </section>
 
-    <!-- Billing Toggle -->
-    <div class="billing-toggle">
-        Monthly
-        <label class="toggle-switch">
-            <input type="checkbox" id="billingToggle">
-            <span class="slider"></span>
-        </label>
-        Yearly (20% discount)
-    </div>
+        <!-- Performance Chart -->
+        <div class="chart-wrapper">
+            <h2>Weekly Performance (Example Data)</h2>
+            <canvas id="performanceChart"></canvas>
+            <p class="muted">
+                Figures represent percentage change from an initial index value of 100.
+                Replace the data arrays in the script as you update weekly performance.
+            </p>
+        </div>
 
-    <!-- Pricing Grid -->
-    <section class="pricing-grid">
+        <!-- Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Portfolio Sleeve</th>
+                    <th>Latest Value (Index = 100)</th>
+                    <th>Change Since Inception</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Long-Term Fund</td>
+                    <td>105.2</td>
+                    <td>+5.2%</td>
+                    <td>Example figures — replace with your own.</td>
+                </tr>
+                <tr>
+                    <td>Medium-Term Fund</td>
+                    <td>102.3</td>
+                    <td>+2.3%</td>
+                    <td>More active risk, shorter durations.</td>
+                </tr>
+                <tr>
+                    <td>Equity Portfolio</td>
+                    <td>107.8</td>
+                    <td>+7.8%</td>
+                    <td>Long-only equity ideas.</td>
+                </tr>
+                <tr>
+                    <td>Forex Portfolio</td>
+                    <td>99.1</td>
+                    <td>-0.9%</td>
+                    <td>Includes realised &amp; unrealised P&amp;L.</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <!-- Tier 1 -->
-        <article class="tier">
-            <h2>Tier 1</h2>
-            <small>Essentials</small>
-            <p class="price" data-month="5" data-year="48">$5 / month</p>
+        <div class="disclaimer-box">
+            Performance is based on internal tracking of our own capital and may include
+            estimates. Past performance is not a reliable indicator of future results.
+            Educational purposes only — not financial advice.
+        </div>
 
-            <ul class="features">
-                <li><i class="fa-solid fa-newspaper"></i>Market news summaries</li>
-                <li><i class="fa-solid fa-comment"></i>Access to community discussion channels</li>
-            </ul>
-
-            <!-- Update href to your payment / Patreon link -->
-            <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 1</a>
-        </article>
-
-        <!-- Tier 2 -->
-        <article class="tier">
-            <h2>Tier 2</h2>
-            <small>Macro &amp; FX</small>
-            <p class="price" data-month="7.5" data-year="72">$7.50 / month</p>
-
-            <ul class="features">
-                <li><i class="fa-solid fa-newspaper"></i>All Tier 1 content</li>
-                <li><i class="fa-solid fa-dollar-sign"></i>Forex &amp; macro commentary</li>
-                <li><i class="fa-solid fa-clock"></i>More frequent update notes</li>
-            </ul>
-
-            <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 2</a>
-        </article>
-
-        <!-- Tier 3 -->
-        <article class="tier best">
-            <h2>Tier 3</h2>
-            <small>Full Access</small>
-            <p class="price" data-month="10" data-year="96">$10 / month</p>
-
-            <ul class="features">
-                <li><i class="fa-solid fa-newspaper"></i>All Tier 1 &amp; 2 content</li>
-                <li><i class="fa-solid fa-chart-line"></i>Deeper portfolio case studies</li>
-                <li><i class="fa-solid fa-list-check"></i>Detailed trade breakdowns (educational only)</li>
-            </ul>
-
-            <a class="btn" href="#" target="_blank" rel="noopener">Join Tier 3</a>
-        </article>
-
-        <!-- CFA Add-on -->
-        <article class="tier">
-            <h2>CFA Add-On</h2>
-            <small>Study Support</small>
-            <p class="price" data-month="5" data-year="48">$5 / month</p>
-
-            <ul class="features">
-                <li><i class="fa-solid fa-book"></i>CFA revision notes &amp; tips</li>
-                <li><i class="fa-solid fa-plus"></i>Add-on to any subscription tier</li>
-            </ul>
-
-            <a class="btn" href="#" target="_blank" rel="noopener">Add CFA Plan</a>
-        </article>
-
-    </section>
-
-    <div class="disclaimer-box">
-        <strong>Important:</strong> Subscriptions grant access to additional educational
-        content and community features only. They do not create an advisory relationship,
-        do not involve us managing money for you, and do not guarantee any financial
-        returns. All opinions are our own and may change without notice.
     </div>
 </main>
 
@@ -395,22 +262,34 @@
     <a href="disclaimer.html">Disclaimer</a>
 </footer>
 
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Monthly / Yearly pricing toggle
-    const toggle = document.getElementById("billingToggle");
-    const prices = document.querySelectorAll(".price");
+    const labels = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"];
 
-    toggle.addEventListener("change", () => {
-        prices.forEach(price => {
-            const monthly = price.getAttribute("data-month");
-            const yearly = price.getAttribute("data-year");
+    const longTermData   = [100, 100.5, 101, 102, 103.5, 105.2];
+    const mediumTermData = [100, 99.8, 100.2, 101, 101.8, 102.3];
+    const equityData     = [100, 101.2, 102.5, 104, 106, 107.8];
+    const forexData      = [100, 99.5, 99.2, 98.7, 99.0, 99.1];
 
-            if (toggle.checked) {
-                price.textContent = `$${yearly} / year`;
-            } else {
-                price.textContent = `$${monthly} / month`;
-            }
-        });
+    const ctx = document.getElementById("performanceChart").getContext("2d");
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                { label:"Long-Term Fund",     data:longTermData,   tension:0.25, borderWidth:2 },
+                { label:"Medium-Term Fund",   data:mediumTermData, tension:0.25, borderWidth:2 },
+                { label:"Equity Portfolio",   data:equityData,     tension:0.25, borderWidth:2 },
+                { label:"Forex Portfolio",    data:forexData,      tension:0.25, borderWidth:2 }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position:"bottom" } },
+            scales: { y: { beginAtZero:false } }
+        }
     });
 </script>
 
