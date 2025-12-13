@@ -1,67 +1,294 @@
-<!-- ADD BELOW YOUR EXISTING LONG-TERM FUND CHART -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fund Performance | Green Tree Capital</title>
 
-<div class="chart-wrapper">
-    <h2>Strategy Performance Breakdown</h2>
-    <canvas id="strategyChart"></canvas>
-    <p class="muted">
-        Performance represents modelled strategy outcomes under varying market regimes,
-        including periods of elevated macro and policy-driven volatility.
-    </p>
-</div>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f3f3e9; color: #1e3a2d; }
+    a { color: #1e3a2d; }
 
-<script>
-const labels = [
-  "W1","W2","W3","W4","W5","W6","W7","W8","W9","W10",
-  "W11","W12","W13","W14","W15","W16","W17","W18","W19","W20"
-];
-
-// Equities: higher volatility, ~5% avg weekly, big spike during macro shock
-const equitiesData = [
-  100, 103, 101, 106, 109,
-  112, 110, 115, 118, 121,
-  145, // +20% regime shock
-  148, 150, 147, 152,
-  155, 158, 160, 162, 165
-];
-
-// Forex: smoother, ~4% avg weekly, smaller drawdowns
-const forexData = [
-  100, 101.5, 102.8, 104.2, 105.5,
-  107.0, 108.3, 109.6, 111.0, 112.5,
-  135, // macro volatility expansion
-  137, 139, 140.5, 142,
-  143.5, 145, 146.5, 148, 149.5
-];
-
-const ctx2 = document.getElementById("strategyChart").getContext("2d");
-
-new Chart(ctx2, {
-  type: "line",
-  data: {
-    labels: labels,
-    datasets: [
-      {
-        label: "Equities Strategy (Modelled)",
-        data: equitiesData,
-        borderWidth: 2,
-        tension: 0.35
-      },
-      {
-        label: "Forex Strategy (Modelled)",
-        data: forexData,
-        borderWidth: 2,
-        tension: 0.2
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: "bottom" }
-    },
-    scales: {
-      y: { beginAtZero: false }
+    header { background-color: #e8e5d8; padding: 16px 40px; border-bottom: 2px solid #1e3a2d; }
+    .header-inner {
+      max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;
     }
-  }
-});
+    .logo { display: flex; align-items: center; gap: 16px; }
+    .logo img { height: 90px; }
+    .logo-text { text-transform: uppercase; letter-spacing: 0.08em; font-size: 1.05rem; font-weight: bold; margin-top: 4px; }
+
+    nav { display: flex; gap: 42px; }
+    nav a {
+      text-decoration: none; font-weight: bold; color: #1e3a2d; font-size: 1rem;
+      border-bottom: 2px solid transparent; padding-bottom: 5px;
+    }
+    nav a:hover { border-bottom: 2px solid #2f5745; }
+    nav a.active { border-bottom: 2px solid #1e3a2d; }
+
+    .container { max-width: 1000px; margin: 40px auto 50px; padding: 0 20px; }
+    h1 { font-size: 2.1rem; margin-bottom: 10px; }
+    h2 { margin-top: 0; }
+    p { line-height: 1.6; font-size: 0.98rem; }
+
+    .chart-wrapper {
+      background: #f7f6ec; border: 1px solid #d3d0c0; border-radius: 6px;
+      padding: 16px 18px; margin-top: 25px;
+    }
+    .chart-wrapper h2 { margin-top: 0; font-size: 1.1rem; }
+    canvas { width: 100%; max-height: 360px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 25px; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid #d3d0c0; text-align: left; }
+    th { background: #e8e5d8; }
+
+    .muted { font-size: 0.9rem; color: #44594c; margin-top: 10px; }
+    .pill {
+      display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.85rem;
+      border: 1px solid #1e3a2d; background: #eceadd; margin-left: 8px;
+    }
+
+    .disclaimer-box {
+      font-size: 0.85rem; line-height: 1.5; padding: 14px 18px;
+      border: 1px solid #1e3a2d; background: #eceadd; margin-top: 30px;
+    }
+
+    footer { text-align: center; padding: 14px 20px; border-top: 2px solid #1e3a2d; font-size: 0.85rem; background: #e8e5d8; }
+    footer a { text-decoration: none; margin-left: 8px; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 720px) {
+      nav { flex-wrap: wrap; gap: 18px; }
+      .logo img { height: 75px; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <img src="logo.png" alt="Green Tree Capital Logo">
+      <div class="logo-text">Green Tree Capital</div>
+    </div>
+
+    <nav>
+      <a href="index.html" class="nav-home">Home</a>
+      <a href="about.html" class="nav-about">About</a>
+      <a href="market-news.html" class="nav-news">Market News</a>
+      <a href="fund-performance.html" class="nav-fund active">Fund Performance</a>
+      <a href="pricing.html" class="nav-pricing">Pricing</a>
+      <a href="join-discord.html" class="nav-discord">Join the Discord</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <h1>
+      Fund Performance Overview
+      <span class="pill">Fictitious / Mock Track Record</span>
+    </h1>
+
+    <p>
+      This page shows the performance of Green Tree Capital strategies using an index format (Inception = 100).
+      The Long-Term Fund is a global ESG + value portfolio using equities, REITs, and commodities (including gold),
+      with awareness of FX exposure from international holdings.
+    </p>
+
+    <p class="muted">
+      Base assumption: $10,000 fully invested from inception. Values are shown as an index (start = 100).
+    </p>
+
+    <!-- Long-Term Fund chart -->
+    <div class="chart-wrapper">
+      <h2>Long-Term Fund (Mock Performance – 24 Months)</h2>
+      <canvas id="longTermChart"></canvas>
+      <p class="muted">
+        Fictitious portfolio series built to resemble realistic month-to-month fluctuations.
+      </p>
+    </div>
+
+    <!-- Strategy chart: equities + forex -->
+    <div class="chart-wrapper">
+      <h2>Equities vs Forex (Mock Performance – Weekly)</h2>
+      <canvas id="strategyChart"></canvas>
+      <p class="muted">
+        Equities target ~+5%/week on average with higher volatility. Forex targets ~+4%/week on average with lower volatility.
+        A one-week “tariff regime” shock is shown as a +20% step up.
+      </p>
+    </div>
+
+    <!-- Summary Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Strategy</th>
+          <th>Latest Value (Index = 100)</th>
+          <th>Change Since Inception</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Long-Term Fund (Global ESG + Value)</td>
+          <td id="ltLatest">—</td>
+          <td id="ltChange">—</td>
+          <td>Global ESG equities + sustainable REITs + gold + broad commodities (mock).</td>
+        </tr>
+        <tr>
+          <td>Equities Strategy</td>
+          <td id="eqLatest">—</td>
+          <td id="eqChange">—</td>
+          <td>Higher volatility profile; “tariff regime” week includes +20% step (mock).</td>
+        </tr>
+        <tr>
+          <td>Forex Strategy</td>
+          <td id="fxLatest">—</td>
+          <td id="fxChange">—</td>
+          <td>Lower volatility profile; also benefits from “tariff regime” volatility expansion (mock).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Allocation Snapshot -->
+    <table>
+      <thead>
+        <tr>
+          <th>Long-Term Fund Sleeve</th>
+          <th>Target Weight</th>
+          <th>Role in Portfolio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>U.S. ESG Value Equities (ETF)</td><td>20%</td><td>Core quality exposure with ESG screens and valuation discipline.</td></tr>
+        <tr><td>Developed ex-U.S. ESG Equities (ETF)</td><td>15%</td><td>Global diversification; benefits if USD weakens vs majors.</td></tr>
+        <tr><td>Emerging Markets ESG Equities (ETF)</td><td>15%</td><td>Long-run growth + valuation discount; higher FX/volatility risk.</td></tr>
+        <tr><td>Clean Energy / Transition Theme (ETF)</td><td>10%</td><td>Higher volatility sleeve targeting decarbonization tailwinds.</td></tr>
+        <tr><td>Global Sustainable REITs (ETF)</td><td>15%</td><td>Real assets + income; helps diversify equity risk.</td></tr>
+        <tr><td>Gold (ETF)</td><td>15%</td><td>Inflation/uncertainty hedge; potential crisis ballast.</td></tr>
+        <tr><td>Broad Commodities (ETF)</td><td>10%</td><td>Inflation hedge and exposure to real economy cycles.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="disclaimer-box">
+      <strong>Disclosure:</strong> Performance figures and charts on this page are <strong>fictitious</strong> and for
+      educational/entertainment purposes only. They do not reflect audited results, actual trading, or any client performance.
+      Nothing here is investment advice.
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  © 2025 Green Tree Capital — Educational Only
+  <a href="disclaimer.html">Disclaimer</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // -----------------------------
+  // Long-Term Fund: 24 months (mock)
+  // End ~ +32% over 2 years
+  // -----------------------------
+  const ltLabels = [
+    "Jan 2024","Feb 2024","Mar 2024","Apr 2024","May 2024","Jun 2024",
+    "Jul 2024","Aug 2024","Sep 2024","Oct 2024","Nov 2024","Dec 2024",
+    "Jan 2025","Feb 2025","Mar 2025","Apr 2025","May 2025","Jun 2025",
+    "Jul 2025","Aug 2025","Sep 2025","Oct 2025","Nov 2025","Dec 2025"
+  ];
+
+  const longTermFundData = [
+    100.0, 101.2, 100.6, 102.5, 104.0, 103.4,
+    105.1, 106.0, 104.8, 107.2, 108.9, 111.0,
+    112.4, 114.0, 113.1, 116.2, 118.7, 117.5,
+    121.0, 123.8, 122.6, 126.4, 129.1, 132.1
+  ];
+
+  new Chart(document.getElementById("longTermChart").getContext("2d"), {
+    type: "line",
+    data: {
+      labels: ltLabels,
+      datasets: [{
+        label: "Long-Term Fund (Index)",
+        data: longTermFundData,
+        borderWidth: 2,
+        tension: 0.25,
+        pointRadius: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: "bottom" } },
+      scales: { y: { beginAtZero: false } }
+    }
+  });
+
+  // -----------------------------
+  // Weekly strategies: Equities vs Forex (mock)
+  // Requirements:
+  // - Equities: ~+5%/week avg, higher volatility
+  // - Forex: ~+4%/week avg, lower volatility
+  // - “Tariff regime” week: +20% step up
+  // -----------------------------
+  const wLabels = [
+    "W1","W2","W3","W4","W5","W6","W7","W8","W9","W10",
+    "W11 (Tariffs)","W12","W13","W14","W15","W16","W17","W18","W19","W20"
+  ];
+
+  // Equities: choppy with bigger dips/spikes, +20% step at W11
+  const equitiesData = [
+    100.0, 106.0, 103.0, 111.0, 116.0,
+    112.0, 120.0, 125.0, 121.0, 128.0,
+    153.6,   // +20% step from 128.0 -> 153.6
+    160.0, 154.0, 166.0, 171.0,
+    165.0, 176.0, 184.0, 179.0, 192.0
+  ];
+
+  // Forex: smoother path, +20% step at W11 too (less volatility around it)
+  const forexData = [
+    100.0, 103.5, 104.8, 109.0, 112.2,
+    114.6, 117.0, 119.9, 123.2, 126.0,
+    151.2,   // +20% step from 126.0 -> 151.2
+    155.0, 157.0, 160.2, 162.5,
+    165.0, 167.2, 170.0, 172.1, 175.5
+  ];
+
+  new Chart(document.getElementById("strategyChart").getContext("2d"), {
+    type: "line",
+    data: {
+      labels: wLabels,
+      datasets: [
+        { label: "Equities (Index)", data: equitiesData, borderWidth: 2, tension: 0.35, pointRadius: 2 },
+        { label: "Forex (Index)", data: forexData, borderWidth: 2, tension: 0.2,  pointRadius: 2 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: "bottom" } },
+      scales: { y: { beginAtZero: false } }
+    }
+  });
+
+  // -----------------------------
+  // Populate summary table automatically
+  // -----------------------------
+  function fmt(n) { return n.toFixed(1); }
+  function pctChange(latest) { return ((latest / 100.0) - 1) * 100; }
+
+  const ltLatest = longTermFundData[longTermFundData.length - 1];
+  const eqLatest = equitiesData[equitiesData.length - 1];
+  const fxLatest = forexData[forexData.length - 1];
+
+  document.getElementById("ltLatest").textContent = fmt(ltLatest);
+  document.getElementById("ltChange").textContent = (pctChange(ltLatest) >= 0 ? "+" : "") + pctChange(ltLatest).toFixed(1) + "%";
+
+  document.getElementById("eqLatest").textContent = fmt(eqLatest);
+  document.getElementById("eqChange").textContent = (pctChange(eqLatest) >= 0 ? "+" : "") + pctChange(eqLatest).toFixed(1) + "%";
+
+  document.getElementById("fxLatest").textContent = fmt(fxLatest);
+  document.getElementById("fxChange").textContent = (pctChange(fxLatest) >= 0 ? "+" : "") + pctChange(fxLatest).toFixed(1) + "%";
 </script>
+
+</body>
+</html>
