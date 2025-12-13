@@ -1,317 +1,67 @@
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fund Performance | Green Tree Capital</title>
+<!-- ADD BELOW YOUR EXISTING LONG-TERM FUND CHART -->
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f3f3e9;
-            color: #1e3a2d;
-        }
+<div class="chart-wrapper">
+    <h2>Strategy Performance Breakdown</h2>
+    <canvas id="strategyChart"></canvas>
+    <p class="muted">
+        Performance represents modelled strategy outcomes under varying market regimes,
+        including periods of elevated macro and policy-driven volatility.
+    </p>
+</div>
 
-        a { color: #1e3a2d; }
-
-        header {
-            background-color: #e8e5d8;
-            padding: 16px 40px;
-            border-bottom: 2px solid #1e3a2d;
-        }
-
-        .header-inner {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo img { height: 90px; }
-
-        .logo-text {
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-size: 1.05rem;
-            font-weight: bold;
-            margin-top: 4px;
-        }
-
-        nav { display: flex; gap: 42px; }
-
-        nav a {
-            text-decoration: none;
-            font-weight: bold;
-            color: #1e3a2d;
-            font-size: 1rem;
-            border-bottom: 2px solid transparent;
-            padding-bottom: 5px;
-        }
-
-        nav a:hover { border-bottom: 2px solid #2f5745; }
-        nav a.active { border-bottom: 2px solid #1e3a2d; }
-
-        .container {
-            max-width: 1000px;
-            margin: 40px auto 50px;
-            padding: 0 20px;
-        }
-
-        h1 { font-size: 2.1rem; margin-bottom: 10px; }
-        p { line-height: 1.6; font-size: 0.98rem; }
-
-        .chart-wrapper {
-            background: #f7f6ec;
-            border: 1px solid #d3d0c0;
-            border-radius: 6px;
-            padding: 16px 18px;
-            margin-top: 25px;
-        }
-
-        .chart-wrapper h2 { margin-top: 0; font-size: 1.1rem; }
-        canvas { width: 100%; max-height: 360px; }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 25px;
-            font-size: 0.95rem;
-        }
-
-        th, td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #d3d0c0;
-            text-align: left;
-        }
-
-        th { background: #e8e5d8; }
-
-        .muted {
-            font-size: 0.9rem;
-            color: #44594c;
-            margin-top: 15px;
-        }
-
-        .disclaimer-box {
-            font-size: 0.85rem;
-            line-height: 1.5;
-            padding: 14px 18px;
-            border: 1px solid #1e3a2d;
-            background: #eceadd;
-            margin-top: 30px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 14px 20px;
-            border-top: 2px solid #1e3a2d;
-            font-size: 0.85rem;
-            background: #e8e5d8;
-        }
-
-        footer a { text-decoration: none; margin-left: 8px; }
-        footer a:hover { text-decoration: underline; }
-
-        @media (max-width: 720px) {
-            nav { flex-wrap: wrap; gap: 18px; }
-            .logo img { height: 75px; }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-    <div class="header-inner">
-        <div class="logo">
-            <img src="logo.png" alt="Green Tree Capital Logo">
-            <div class="logo-text">Green Tree Capital</div>
-        </div>
-
-        <nav>
-            <a href="index.html" class="nav-home">Home</a>
-            <a href="about.html" class="nav-about">About</a>
-            <a href="market-news.html" class="nav-news">Market News</a>
-            <a href="fund-performance.html" class="nav-fund active">Fund Performance</a>
-            <a href="pricing.html" class="nav-pricing">Pricing</a>
-            <a href="join-discord.html" class="nav-discord">Join the Discord</a>
-        </nav>
-    </div>
-</header>
-
-<main>
-    <div class="container">
-
-        <h1>Fund Performance Overview</h1>
-        <p>
-            Below is the performance of the <strong>Green Tree Capital – Long-Term Fund</strong>.
-            This fund is a global <strong>ESG + value</strong> strategy using a diversified mix of
-            <strong>equities, REITs, and commodities</strong> (including gold). FX exposure is present
-            due to global holdings and is monitored as part of the overall risk profile.
-        </p>
-
-        <p class="muted">
-            <strong>Base assumption:</strong> $10,000 fully invested from inception. Performance is shown as an index
-            (Inception = 100). <strong>All figures on this page are simulated for educational/mock purposes only.</strong>
-        </p>
-
-        <!-- Performance Chart -->
-        <div class="chart-wrapper">
-            <h2>Long-Term Fund Performance (Last 24 Months – Simulated)</h2>
-            <canvas id="performanceChart"></canvas>
-            <p class="muted">
-                Index values represent percentage change from an initial value of 100.
-                This is an illustrative “mock return” series designed to look realistic (up and down months included).
-            </p>
-        </div>
-
-        <!-- Summary Table -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Fund</th>
-                    <th>Latest Value (Index = 100)</th>
-                    <th>Change Since Inception</th>
-                    <th>Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Long-Term Fund (Global ESG + Value)</td>
-                    <td>132.1</td>
-                    <td>+32.1%</td>
-                    <td>Diversified mix of ESG-screened global equities, REITs, gold, and a broad commodity sleeve (simulated).</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Optional: Allocation Snapshot -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Asset / Sleeve</th>
-                    <th>Target Weight</th>
-                    <th>Role in Portfolio</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>U.S. ESG Value Equities (ETF)</td>
-                    <td>20%</td>
-                    <td>Core quality exposure with ESG screens and valuation discipline.</td>
-                </tr>
-                <tr>
-                    <td>Developed ex-U.S. ESG Equities (ETF)</td>
-                    <td>15%</td>
-                    <td>Global diversification; benefits if USD weakens vs majors.</td>
-                </tr>
-                <tr>
-                    <td>Emerging Markets ESG Equities (ETF)</td>
-                    <td>15%</td>
-                    <td>Long-run growth + valuation discount; higher FX/volatility risk.</td>
-                </tr>
-                <tr>
-                    <td>Clean Energy / Transition Theme (ETF)</td>
-                    <td>10%</td>
-                    <td>Higher volatility sleeve targeting decarbonization tailwinds.</td>
-                </tr>
-                <tr>
-                    <td>Global Sustainable REITs (ETF)</td>
-                    <td>15%</td>
-                    <td>Real assets + income; helps diversify equity risk.</td>
-                </tr>
-                <tr>
-                    <td>Gold (ETF)</td>
-                    <td>15%</td>
-                    <td>Inflation/uncertainty hedge; potential crisis ballast.</td>
-                </tr>
-                <tr>
-                    <td>Broad Commodities (ETF)</td>
-                    <td>10%</td>
-                    <td>Inflation hedge and exposure to real economy cycles.</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="disclaimer-box">
-            <strong>Disclaimer:</strong> All performance and allocation figures on this page are
-            <strong>simulated “mock returns”</strong> for educational purposes only. They are not
-            a promise of returns, not a recommendation, and not financial advice. Past performance
-            (including simulated performance) is not indicative of future results.
-        </div>
-
-    </div>
-</main>
-
-<footer>
-    © 2025 Green Tree Capital — Educational Only
-    <a href="disclaimer.html">Disclaimer</a>
-</footer>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // 24 months of simulated index values (Inception = 100)
-    const labels = [
-        "Jan 2024","Feb 2024","Mar 2024","Apr 2024","May 2024","Jun 2024",
-        "Jul 2024","Aug 2024","Sep 2024","Oct 2024","Nov 2024","Dec 2024",
-        "Jan 2025","Feb 2025","Mar 2025","Apr 2025","May 2025","Jun 2025",
-        "Jul 2025","Aug 2025","Sep 2025","Oct 2025","Nov 2025","Dec 2025"
-    ];
+const labels = [
+  "W1","W2","W3","W4","W5","W6","W7","W8","W9","W10",
+  "W11","W12","W13","W14","W15","W16","W17","W18","W19","W20"
+];
 
-    // Choppy but upward-biased path:
-    // End 2024 ≈ +11% (111.0), end 2025 ≈ +32% total (132.1)
-    const longTermFundData = [
-        100.0, 101.2, 100.6, 102.5, 104.0, 103.4,
-        105.1, 106.0, 104.8, 107.2, 108.9, 111.0,
-        112.4, 114.0, 113.1, 116.2, 118.7, 117.5,
-        121.0, 123.8, 122.6, 126.4, 129.1, 132.1
-    ];
+// Equities: higher volatility, ~5% avg weekly, big spike during macro shock
+const equitiesData = [
+  100, 103, 101, 106, 109,
+  112, 110, 115, 118, 121,
+  145, // +20% regime shock
+  148, 150, 147, 152,
+  155, 158, 160, 162, 165
+];
 
-    const ctx = document.getElementById("performanceChart").getContext("2d");
+// Forex: smoother, ~4% avg weekly, smaller drawdowns
+const forexData = [
+  100, 101.5, 102.8, 104.2, 105.5,
+  107.0, 108.3, 109.6, 111.0, 112.5,
+  135, // macro volatility expansion
+  137, 139, 140.5, 142,
+  143.5, 145, 146.5, 148, 149.5
+];
 
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: "Long-Term Fund (Simulated Index)",
-                    data: longTermFundData,
-                    tension: 0.25,
-                    borderWidth: 2,
-                    pointRadius: 2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: "bottom" },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return "Index: " + context.parsed.y.toFixed(1);
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: { beginAtZero: false }
-            }
-        }
-    });
+const ctx2 = document.getElementById("strategyChart").getContext("2d");
+
+new Chart(ctx2, {
+  type: "line",
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: "Equities Strategy (Modelled)",
+        data: equitiesData,
+        borderWidth: 2,
+        tension: 0.35
+      },
+      {
+        label: "Forex Strategy (Modelled)",
+        data: forexData,
+        borderWidth: 2,
+        tension: 0.2
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: "bottom" }
+    },
+    scales: {
+      y: { beginAtZero: false }
+    }
+  }
+});
 </script>
-
-</body>
-</html>
-```
