@@ -1,0 +1,38 @@
+{
+  "baseCurrency": "USD",
+  "baseIndex": 100,
+  "holdings": [
+    { "ticker": "AAPL", "name": "Apple", "weight": 0.07 },
+    { "ticker": "MSFT", "name": "Microsoft", "weight": 0.08 },
+    { "ticker": "NVDA", "name": "NVIDIA", "weight": 0.07 },
+    { "ticker": "GOOGL", "name": "Alphabet", "weight": 0.04 },
+    { "ticker": "AMZN", "name": "Amazon", "weight": 0.04 },
+    { "ticker": "UNH", "name": "UnitedHealth", "weight": 0.02 },
+    { "ticker": "JPM", "name": "JPMorgan", "weight": 0.02 },
+    { "ticker": "COST", "name": "Costco", "weight": 0.01 },
+
+    { "ticker": "NVO", "name": "Novo Nordisk", "weight": 0.05 },
+    { "ticker": "TSM", "name": "Taiwan Semi", "weight": 0.05 },
+    { "ticker": "ASML", "name": "ASML", "weight": 0.03 },
+    { "ticker": "NSRGY", "name": "Nestle", "weight": 0.02 },
+    { "ticker": "TM", "name": "Toyota", "weight": 0.02 },
+    { "ticker": "SIEGY", "name": "Siemens", "weight": 0.015 },
+    { "ticker": "SAP", "name": "SAP", "weight": 0.015 },
+
+    { "ticker": "SPY", "name": "S&P 500 ETF", "weight": 0.08 },
+    { "ticker": "EEM", "name": "Emerging Markets ETF", "weight": 0.05 },
+    { "ticker": "INDA", "name": "India ETF", "weight": 0.02 },
+
+    { "ticker": "ICLN", "name": "Clean Energy ETF", "weight": 0.05 },
+    { "ticker": "TAN", "name": "Solar ETF", "weight": 0.03 },
+    { "ticker": "LIT", "name": "Battery Metals ETF", "weight": 0.02 },
+
+    { "ticker": "GLD", "name": "Gold ETF", "weight": 0.05 },
+    { "ticker": "SLV", "name": "Silver ETF", "weight": 0.05 },
+
+    { "ticker": "VNQ", "name": "REIT ETF", "weight": 0.025 },
+    { "ticker": "PLD", "name": "Prologis", "weight": 0.01 },
+    { "ticker": "DLR", "name": "Digital Realty", "weight": 0.01 },
+    { "ticker": "AMT", "name": "American Tower", "weight": 0.005 }
+  ]
+}
