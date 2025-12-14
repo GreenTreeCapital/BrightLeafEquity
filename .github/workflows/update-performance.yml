@@ -3,7 +3,7 @@ name: Update Fund Performance
 on:
   schedule:
     - cron: "0 22 * * *"  # daily 22:00 UTC
-  workflow_dispatch:      # lets you run it manually too
+  workflow_dispatch:
 
 permissions:
   contents: write
