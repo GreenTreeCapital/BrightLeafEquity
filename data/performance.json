@@ -1,6 +1,39 @@
 {
-  "labels": [],
-  "longTermIndex": [],
-  "latest": { "index": 100, "changePct": 0 },
-  "holdings": []
+  "labels": ["2025-12-01", "2025-12-08", "2025-12-15", "2025-12-22"],
+  "longTermIndex": [100.0, 101.4, 100.9, 102.7],
+  "latest": { "index": 102.7, "changePct": 2.7 },
+  "holdings": [
+    { "ticker": "AAPL", "name": "Apple", "weight": 0.07, "price": 230.12 },
+    { "ticker": "MSFT", "name": "Microsoft", "weight": 0.08, "price": 425.55 },
+    { "ticker": "NVDA", "name": "NVIDIA", "weight": 0.07, "price": 138.22 },
+    { "ticker": "GOOGL", "name": "Alphabet", "weight": 0.04, "price": 174.10 },
+    { "ticker": "AMZN", "name": "Amazon", "weight": 0.04, "price": 189.60 },
+    { "ticker": "UNH", "name": "UnitedHealth", "weight": 0.02, "price": 555.30 },
+    { "ticker": "JPM", "name": "JPMorgan", "weight": 0.02, "price": 214.45 },
+    { "ticker": "COST", "name": "Costco", "weight": 0.01, "price": 915.00 },
+
+    { "ticker": "NVO", "name": "Novo Nordisk", "weight": 0.05, "price": 125.20 },
+    { "ticker": "TSM", "name": "Taiwan Semi", "weight": 0.05, "price": 195.10 },
+    { "ticker": "ASML", "name": "ASML", "weight": 0.03, "price": 765.35 },
+    { "ticker": "NSRGY", "name": "Nestle", "weight": 0.02, "price": 101.45 },
+    { "ticker": "TM", "name": "Toyota", "weight": 0.02, "price": 195.00 },
+    { "ticker": "SIEGY", "name": "Siemens", "weight": 0.015, "price": 95.10 },
+    { "ticker": "SAP", "name": "SAP", "weight": 0.015, "price": 205.20 },
+
+    { "ticker": "SPY", "name": "S&P 500 ETF", "weight": 0.08, "price": 590.22 },
+    { "ticker": "EEM", "name": "Emerging Markets ETF", "weight": 0.05, "price": 41.15 },
+    { "ticker": "INDA", "name": "India ETF", "weight": 0.02, "price": 54.80 },
+
+    { "ticker": "ICLN", "name": "Clean Energy ETF", "weight": 0.05, "price": 14.95 },
+    { "ticker": "TAN", "name": "Solar ETF", "weight": 0.03, "price": 43.20 },
+    { "ticker": "LIT", "name": "Battery Metals ETF", "weight": 0.02, "price": 53.10 },
+
+    { "ticker": "GLD", "name": "Gold ETF", "weight": 0.05, "price": 190.25 },
+    { "ticker": "SLV", "name": "Silver ETF", "weight": 0.05, "price": 24.15 },
+
+    { "ticker": "VNQ", "name": "REIT ETF", "weight": 0.025, "price": 84.12 },
+    { "ticker": "PLD", "name": "Prologis", "weight": 0.01, "price": 128.30 },
+    { "ticker": "DLR", "name": "Digital Realty", "weight": 0.01, "price": 158.40 },
+    { "ticker": "AMT", "name": "American Tower", "weight": 0.005, "price": 201.70 }
+  ]
 }
