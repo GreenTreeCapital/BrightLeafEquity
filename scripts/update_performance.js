@@ -1,50 +1,54 @@
 /**
- * Green Bull Capital — Update performance.json from holdings.json
- * - Reads /data/holdings.json
- * - Fetches latest prices from Alpha Vantage (GLOBAL_QUOTE)
- * - Writes /data/performance.json with holdings + latest index point
- * - ONE-TIME BACKFILL: ensures at least 52 weekly points for charts (fictitious, deterministic)
+ * Green Bull Capital — Build performance.json from holdings.json using REAL historical data
+ *
+ * - Reads:  data/holdings.json
+ * - Fetches weekly adjusted history per ticker from Alpha Vantage:
+ *     TIME_SERIES_WEEKLY_ADJUSTED (stocks/ETFs)
+ * - Builds last 52 weekly portfolio index points (weights assumed constant)
+ * - Writes: data/performance.json
+ * - Caches per-ticker history in: data/cache/<TICKER>.json
  */
 
 const fs = require("fs");
+const path = require("path");
 
 const API_KEY = process.env.ALPHAVANTAGE_API_KEY;
 
+const HOLDINGS_PATH = "data/holdings.json";
+const PERF_PATH = "data/performance.json";
+const CACHE_DIR = "data/cache";
+
+// Alpha Vantage free tier is rate limited; keep calls spaced
+const API_CALL_DELAY_MS = 13000; // ~13s between calls is safer on free tier
+
 // -----------------------------
-// Alpha Vantage helpers
+// Utilities
 // -----------------------------
-async function fetchJson(url) {
-  const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
-  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-  return await res.json();
+function ensureDir(p) {
+  if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
 }
 
-async function getAlphaVantagePrice(symbol) {
-  const url =
-    `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(symbol)}&apikey=${API_KEY}`;
-
-  const data = await fetchJson(url);
-
-  if (data.Note) throw new Error("Alpha Vantage rate limit: " + data.Note);
-  if (data["Error Message"]) throw new Error("Alpha Vantage error: " + data["Error Message"]);
-
-  const quote = data["Global Quote"];
-  if (!quote || !quote["05. price"]) throw new Error("No quote returned for " + symbol);
-
-  const price = Number(quote["05. price"]);
-  if (!Number.isFinite(price)) throw new Error("Invalid price for " + symbol);
-
-  return price;
+function readJsonSafe(p, fallback) {
+  try {
+    if (!fs.existsSync(p)) return fallback;
+    return JSON.parse(fs.readFileSync(p, "utf8"));
+  } catch {
+    return fallback;
+  }
 }
 
-// -----------------------------
-// Date helpers (weekly labels)
-// -----------------------------
+function writeJson(p, obj) {
+  fs.writeFileSync(p, JSON.stringify(obj, null, 2));
+}
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
 function isoDate(d) {
   return d.toISOString().slice(0, 10);
 }
 
-// Returns the most recent Friday (UTC) on or before "now"
 function mostRecentFridayUTC(now = new Date()) {
   const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
   const day = d.getUTCDay(); // Sun=0 ... Fri=5
@@ -59,86 +63,98 @@ function subtractDaysUTC(d, days) {
   return x;
 }
 
-// Creates an array of weekly ISO labels ending at endDate (inclusive), going back N-1 weeks
-function buildWeeklyLabels(endDate, weeks) {
+function buildWeeklyLabels(endFriday, weeks = 52) {
   const labels = [];
   for (let i = weeks - 1; i >= 0; i--) {
-    const dd = subtractDaysUTC(endDate, i * 7);
-    labels.push(isoDate(dd));
+    labels.push(isoDate(subtractDaysUTC(endFriday, i * 7)));
   }
   return labels;
 }
 
+async function fetchJson(url) {
+  const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
+  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+  return await res.json();
+}
+
 // -----------------------------
-// Deterministic PRNG for backfill (so it doesn’t change every run)
+// Alpha Vantage weekly adjusted (stocks/ETFs)
 // -----------------------------
-function xfnv1a(str) {
-  let h = 2166136261;
-  for (let i = 0; i < str.length; i++) {
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 16777619);
+async function fetchWeeklyAdjustedSeries(symbol) {
+  const url =
+    `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=${encodeURIComponent(symbol)}&apikey=${API_KEY}`;
+
+  const data = await fetchJson(url);
+
+  if (data.Note) throw new Error("Alpha Vantage rate limit: " + data.Note);
+  if (data["Error Message"]) throw new Error("Alpha Vantage error: " + data["Error Message"]);
+
+  const series = data["Weekly Adjusted Time Series"];
+  if (!series) throw new Error("No Weekly Adjusted Time Series returned for " + symbol);
+
+  // Map: date -> adjusted close
+  const out = {};
+  for (const [date, row] of Object.entries(series)) {
+    const adj = Number(row["5. adjusted close"]);
+    if (Number.isFinite(adj)) out[date] = adj;
   }
-  return h >>> 0;
+  return out;
 }
 
-function mulberry32(seed) {
-  return function () {
-    let t = seed += 0x6D2B79F5;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+// Cache format: { fetchedAt: "ISO", series: { "YYYY-MM-DD": price, ... } }
+function cachePathFor(symbol) {
+  return path.join(CACHE_DIR, `${symbol.toUpperCase()}.json`);
 }
 
-// -----------------------------
-// Index helpers
-// -----------------------------
-function normalizeIndex(enrichedHoldings) {
-  // Portfolio "price" = sum(weight * price)
-  return enrichedHoldings.reduce((sum, h) => sum + (h.weight * (h.price ?? 0)), 0);
+function cacheIsFresh(cacheObj, maxAgeHours = 24) {
+  if (!cacheObj || !cacheObj.fetchedAt) return false;
+  const t = Date.parse(cacheObj.fetchedAt);
+  if (!Number.isFinite(t)) return false;
+  const ageMs = Date.now() - t;
+  return ageMs < maxAgeHours * 3600 * 1000;
 }
 
-// ONE-TIME BACKFILL: generate 52 weekly points that end at currentIndex,
-// start at 100, with choppy path (deterministic)
-function backfillWeeklyIndex({ endLabel, endIndex, weeks = 52, seedKey = "default" }) {
-  const seed = xfnv1a(seedKey + "|" + endLabel + "|" + String(endIndex));
-  const rand = mulberry32(seed);
+// Find the last available weekly price on or before a target date
+function priceOnOrBefore(seriesObj, targetISO) {
+  if (!seriesObj) return null;
 
-  // Build labels ending at the current label
-  const endDate = new Date(endLabel + "T00:00:00Z");
-  const labels = buildWeeklyLabels(endDate, weeks);
+  // Alpha Vantage keys are ISO dates; get all keys once
+  const dates = Object.keys(seriesObj);
+  if (!dates.length) return null;
 
-  // Create a choppy path from 100 -> endIndex
-  // We create weekly returns around a drift that achieves the endIndex target.
-  const startIndex = 100;
-  const target = endIndex;
+  // We want most recent <= target
+  // dates are not guaranteed sorted, so sort descending once per call (small enough for weekly series)
+  dates.sort((a, b) => (a < b ? 1 : -1));
 
-  // If target is too close, still make it choppy but end correct
-  const points = [startIndex];
+  for (const d of dates) {
+    if (d <= targetISO) return seriesObj[d];
+  }
+  return null;
+}
 
-  // Compute average multiplicative weekly drift needed
-  const drift = Math.pow(target / startIndex, 1 / (weeks - 1)); // multiplier per week
+// Portfolio "price" at a point in time = sum(weight * price)
+function portfolioPriceAtDate(holdings, seriesByTicker, dateISO) {
+  let total = 0;
+  let coveredWeight = 0;
 
-  for (let i = 1; i < weeks; i++) {
-    // volatility: +/- ~1.5% typical, occasional larger move
-    const baseVol = 0.015;
-    const shock = (rand() < 0.08) ? 0.035 : 0.0; // 8% chance larger move
-    const vol = baseVol + shock;
+  for (const h of holdings) {
+    const w = Number(h.weight) || 0;
+    const t = String(h.ticker || "").trim().toUpperCase();
+    if (!t || w <= 0) continue;
 
-    // Random noise in [-vol, +vol]
-    const noise = (rand() * 2 - 1) * vol;
+    const series = seriesByTicker[t];
+    const px = priceOnOrBefore(series, dateISO);
 
-    // Apply drift and noise
-    const prev = points[i - 1];
-    const next = prev * drift * (1 + noise);
-    points.push(next);
+    if (px != null && Number.isFinite(px)) {
+      total += w * px;
+      coveredWeight += w;
+    } else {
+      // If missing data, just skip that holding’s contribution
+      // (You could also choose to carry-forward or halt, but this is robust.)
+    }
   }
 
-  // Rescale entire series so last point matches target exactly
-  const scale = target / points[points.length - 1];
-  const scaled = points.map(v => Number((v * scale).toFixed(4)));
-
-  return { labels, index: scaled };
+  return { total, coveredWeight };
 }
 
 // -----------------------------
@@ -146,121 +162,132 @@ function backfillWeeklyIndex({ endLabel, endIndex, weeks = 52, seedKey = "defaul
 // -----------------------------
 (async () => {
   if (!API_KEY) {
-    console.error("Missing ALPHAVANTAGE_API_KEY. Add it in GitHub Secrets or workflow env.");
+    console.error("Missing ALPHAVANTAGE_API_KEY");
     process.exit(1);
   }
 
-  const holdingsPath = "data/holdings.json";
-  const perfPath = "data/performance.json";
-
-  if (!fs.existsSync(holdingsPath)) {
+  if (!fs.existsSync(HOLDINGS_PATH)) {
     console.error("Missing data/holdings.json");
     process.exit(1);
   }
 
-  const holdingsData = JSON.parse(fs.readFileSync(holdingsPath, "utf8"));
-  const holdings = holdingsData.holdings || [];
+  ensureDir(CACHE_DIR);
 
-  // Fetch prices
-  const enriched = [];
-  for (const h of holdings) {
-    const ticker = String(h.ticker || "").trim();
-    const upper = ticker.toUpperCase();
+  const holdingsData = readJsonSafe(HOLDINGS_PATH, { holdings: [] });
+  const holdingsRaw = Array.isArray(holdingsData.holdings) ? holdingsData.holdings : [];
 
-    // Only treat clearly pseudo tickers as pseudo (DO NOT use "-" because BRK-B etc exist)
-    const isPseudo =
-      upper.includes("CASH") ||
-      upper.includes("HEDGE") ||
-      upper === "USD" ||
-      upper === "USD-CASH";
-
-    if (isPseudo || !ticker) {
-      enriched.push({ ...h, price: null });
-      continue;
-    }
-
-    try {
-      const price = await getAlphaVantagePrice(ticker);
-      enriched.push({ ...h, price });
-
-      // Free tier pacing
-      await new Promise(r => setTimeout(r, 13000));
-    } catch (e) {
-      enriched.push({ ...h, price: null, error: String(e.message || e) });
-      console.warn("Price fetch failed:", ticker, e.message || e);
-    }
-  }
-
-  // Load existing perf
-  let perf = { labels: [], longTermIndex: [], latest: { index: 100, changePct: 0 }, holdings: [] };
-  if (fs.existsSync(perfPath)) {
-    try { perf = JSON.parse(fs.readFileSync(perfPath, "utf8")); } catch {}
-  }
-
-  // Compute portfolio price and index
-  const portfolioPrice = normalizeIndex(enriched);
-
-  if (!perf._baselinePortfolioPrice) {
-    perf._baselinePortfolioPrice = portfolioPrice || 1;
-  }
-
-  const baseline = perf._baselinePortfolioPrice || 1;
-  const indexValue = baseline ? (portfolioPrice / baseline) * 100 : 100;
-
-  // Weekly label: use most recent Friday (UTC), so you get exactly 1 point per week
-  const friday = mostRecentFridayUTC(new Date());
-  const t = isoDate(friday);
-
-  perf.labels = Array.isArray(perf.labels) ? perf.labels : [];
-  perf.longTermIndex = Array.isArray(perf.longTermIndex) ? perf.longTermIndex : [];
-
-  // ONE-TIME BACKFILL: Ensure at least 52 weekly points (fictitious) so the chart looks “complete”
-  // This only runs once, and is flagged in the JSON.
-  const NEED_WEEKS = 52;
-  if (!perf._backfilledWeekly52 && perf.labels.length < NEED_WEEKS) {
-    const seedKey = "GreenBullCapital|weekly52";
-    const backfill = backfillWeeklyIndex({
-      endLabel: t,
-      endIndex: Number(indexValue.toFixed(4)),
-      weeks: NEED_WEEKS,
-      seedKey
-    });
-
-    perf.labels = backfill.labels;
-    perf.longTermIndex = backfill.index;
-
-    perf._backfilledWeekly52 = true;
-    perf._backfillNote = "Backfilled 52 weekly index points (fictitious, deterministic) to provide a complete 12-month chart.";
-  }
-
-  // Append new point if the last label isn't this week's label
-  const lastLabel = perf.labels[perf.labels.length - 1];
-  if (lastLabel !== t) {
-    perf.labels.push(t);
-    perf.longTermIndex.push(Number(indexValue.toFixed(4)));
-  } else {
-    // If we already have this week's label, update the last value to the newest index
-    perf.longTermIndex[perf.longTermIndex.length - 1] = Number(indexValue.toFixed(4));
-  }
-
-  const first = perf.longTermIndex[0] ?? 100;
-  const changePct = ((indexValue / first) - 1) * 100;
-
-  perf.latest = {
-    index: Number(indexValue.toFixed(2)),
-    changePct: Number(changePct.toFixed(2))
-  };
-
-  // Write holdings so the page can read one file
-  perf.holdings = enriched.map(h => ({
-    ticker: h.ticker,
-    name: h.name,
-    weight: h.weight,
-    price: (h.price == null ? null : Number(h.price)),
-    assetClass: h.assetClass,
-    region: h.region
+  // Filter pseudo holdings (cash/hedges). IMPORTANT: DO NOT treat "-" as pseudo (BRK-B exists).
+  const holdings = holdingsRaw.filter(h => {
+    const t = String(h.ticker || "").toUpperCase();
+    if (!t) return false;
+    if (t.includes("CASH") || t.includes("HEDGE") || t === "USD" || t === "USD-CASH") return false;
+    return true;
+  }).map(h => ({
+    ...h,
+    ticker: String(h.ticker).toUpperCase(),
+    weight: Number(h.weight) || 0
   }));
 
-  fs.writeFileSync(perfPath, JSON.stringify(perf, null, 2));
-  console.log("Updated", perfPath);
+  // -----------------------------
+  // Fetch/cached weekly series per ticker
+  // -----------------------------
+  const seriesByTicker = {};
+  const latestPriceByTicker = {};
+
+  for (const h of holdings) {
+    const ticker = h.ticker;
+    const cPath = cachePathFor(ticker);
+    const cached = readJsonSafe(cPath, null);
+
+    let series = null;
+    try {
+      if (cacheIsFresh(cached, 24) && cached.series) {
+        series = cached.series;
+      } else {
+        series = await fetchWeeklyAdjustedSeries(ticker);
+        writeJson(cPath, { fetchedAt: new Date().toISOString(), series });
+        await sleep(API_CALL_DELAY_MS);
+      }
+    } catch (e) {
+      console.warn(`[WARN] ${ticker}: ${String(e.message || e)}`);
+      // If fetch fails but cache exists, fall back to cache even if stale
+      if (cached && cached.series) series = cached.series;
+    }
+
+    seriesByTicker[ticker] = series;
+
+    // Latest available weekly price
+    const keys = series ? Object.keys(series) : [];
+    if (keys.length) {
+      keys.sort((a, b) => (a < b ? 1 : -1));
+      latestPriceByTicker[ticker] = series[keys[0]];
+    } else {
+      latestPriceByTicker[ticker] = null;
+    }
+  }
+
+  // -----------------------------
+  // Build last 52 weekly index points from REAL prices
+  // -----------------------------
+  const endFriday = mostRecentFridayUTC(new Date());
+  const labels = buildWeeklyLabels(endFriday, 52);
+
+  // Compute portfolio “price” each week
+  const weeklyPrices = labels.map(d => portfolioPriceAtDate(holdings, seriesByTicker, d));
+
+  // If lots of data missing, your index could be distorted; we’ll still compute but track coverage.
+  const firstNonZero = weeklyPrices.find(p => p.total > 0) || { total: 1, coveredWeight: 0 };
+  const baselinePortfolioPrice = firstNonZero.total || 1;
+
+  const longTermIndex = weeklyPrices.map(p => {
+    const idx = (p.total / baselinePortfolioPrice) * 100;
+    return Number(idx.toFixed(4));
+  });
+
+  const latestIndex = longTermIndex[longTermIndex.length - 1];
+  const firstIndex = longTermIndex[0] || 100;
+  const changePct = ((latestIndex / firstIndex) - 1) * 100;
+
+  // -----------------------------
+  // Output holdings for website table
+  // -----------------------------
+  const enrichedHoldings = holdingsRaw.map(h => {
+    const t = String(h.ticker || "").toUpperCase();
+    const w = Number(h.weight) || 0;
+    const px = t ? latestPriceByTicker[t] : null;
+
+    return {
+      ticker: h.ticker,
+      name: h.name,
+      weight: w,
+      price: (px == null ? null : Number(px)),
+      assetClass: h.assetClass,
+      region: h.region
+    };
+  });
+
+  const perf = {
+    baseCurrency: holdingsData.baseCurrency || "USD",
+    baseIndex: holdingsData.baseIndex || 100,
+
+    // Real weekly history (last 52 Fridays)
+    labels,
+    longTermIndex,
+
+    latest: {
+      index: Number(latestIndex.toFixed(2)),
+      changePct: Number(changePct.toFixed(2))
+    },
+
+    // Used by your webpage holdings table + pie chart
+    holdings: enrichedHoldings,
+
+    // Metadata (useful for debugging / transparency)
+    _historySource: "AlphaVantage: TIME_SERIES_WEEKLY_ADJUSTED",
+    _historyAsOfFridayUTC: isoDate(endFriday),
+    _baselinePortfolioPrice: Number(baselinePortfolioPrice.toFixed(6))
+  };
+
+  writeJson(PERF_PATH, perf);
+  console.log("Updated", PERF_PATH);
 })();
