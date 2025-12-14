@@ -37,6 +37,9 @@
     .chart-wrapper h2 { margin-top: 0; font-size: 1.1rem; }
     canvas { width: 100%; max-height: 360px; }
 
+    /* Smaller height for pie so it doesn't get too tall */
+    .pie-wrap canvas { max-height: 320px; }
+
     table { width: 100%; border-collapse: collapse; margin-top: 25px; font-size: 0.95rem; }
     th, td { padding: 8px 10px; border-bottom: 1px solid #d3d0c0; text-align: left; }
     th { background: #e8e5d8; }
@@ -102,9 +105,23 @@
 
     <!-- Long-Term Fund chart (AUTO from data/performance.json) -->
     <div class="chart-wrapper">
-      <h2>Long-Term Fund</h2>
+      <h2>Long-Term Fund (Full Track Record)</h2>
       <canvas id="longTermChart"></canvas>
       <p class="muted" id="ltStatus">Loading data from <code>data/performance.json</code>…</p>
+    </div>
+
+    <!-- Past year performance chart (AUTO) -->
+    <div class="chart-wrapper">
+      <h2>Long-Term Fund (Past 12 Months)</h2>
+      <canvas id="oneYearChart"></canvas>
+      <p class="muted" id="oneYearStatus">Loading 12-month view…</p>
+    </div>
+
+    <!-- Pie chart of holdings (AUTO) -->
+    <div class="chart-wrapper pie-wrap">
+      <h2>Long-Term Fund Allocation (Holdings by Weight)</h2>
+      <canvas id="holdingsPie"></canvas>
+      <p class="muted" id="pieStatus">Loading holdings allocation…</p>
     </div>
 
     <!-- Strategy chart: equities + forex (MOCK) -->
@@ -152,7 +169,7 @@
     <!-- FULL HOLDINGS TABLE (AUTO from data/performance.json -> holdings) -->
     <h2 style="margin-top:28px;">Full Portfolio Holdings (Long-Term Fund)</h2>
     <p class="muted" style="margin-top:6px;">
-      Auto-populated from <code>data/performance.json</code>. Your GitHub Action should write prices + weights here.
+      Auto-populated from <code>data/performance.json</code>. Your GitHub Action writes prices + weights here.
     </p>
 
     <table>
@@ -212,13 +229,23 @@
   function fmtPct(p) { return (p >= 0 ? "+" : "") + Number(p).toFixed(1) + "%"; }
   function pctChangeFrom100(latest) { return ((latest / 100.0) - 1) * 100; }
 
+  function safeDateParse(label) {
+    // performance.json labels are ISO dates: YYYY-MM-DD
+    const d = new Date(label);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
   // ---------------------------------------------
-  // AUTO: Long-Term Fund + Holdings from data/performance.json
+  // AUTO: Long-Term Fund + Holdings + Pie + 12M chart
   // ---------------------------------------------
   let longTermChartInstance = null;
+  let oneYearChartInstance = null;
+  let holdingsPieInstance = null;
 
   async function loadLongTermFromJSON() {
-    const status = document.getElementById("ltStatus");
+    const ltStatus = document.getElementById("ltStatus");
+    const oneYearStatus = document.getElementById("oneYearStatus");
+    const pieStatus = document.getElementById("pieStatus");
 
     try {
       const res = await fetch("data/performance.json", { cache: "no-store" });
@@ -228,15 +255,16 @@
       const labels = Array.isArray(perf.labels) ? perf.labels : [];
       const series = Array.isArray(perf.longTermIndex) ? perf.longTermIndex : [];
 
-      // If Action hasn't written data yet:
       if (labels.length === 0 || series.length === 0) {
-        status.textContent = "No long-term fund data yet. Run the GitHub Action once to populate data/performance.json.";
+        ltStatus.textContent = "No long-term fund data yet. Run the GitHub Action to populate data/performance.json.";
+        oneYearStatus.textContent = "No data yet.";
+        pieStatus.textContent = "No holdings data yet.";
         return;
       }
 
-      status.textContent = "Auto-updated from data/performance.json";
+      ltStatus.textContent = "Auto-updated from data/performance.json";
 
-      // Chart
+      // Full Track Record Chart
       const ctx = document.getElementById("longTermChart").getContext("2d");
       if (longTermChartInstance) longTermChartInstance.destroy();
       longTermChartInstance = new Chart(ctx, {
@@ -266,8 +294,9 @@
 
       // Holdings table
       const tbody = document.getElementById("holdingsBody");
-      if (Array.isArray(perf.holdings) && perf.holdings.length > 0) {
-        tbody.innerHTML = perf.holdings.map(h => `
+      const holdings = Array.isArray(perf.holdings) ? perf.holdings : [];
+      if (holdings.length > 0) {
+        tbody.innerHTML = holdings.map(h => `
           <tr>
             <td>${h.ticker ?? "—"}</td>
             <td>${h.name ?? "—"}</td>
@@ -279,8 +308,107 @@
         tbody.innerHTML = `<tr><td colspan="4" class="muted">No holdings found in data/performance.json yet.</td></tr>`;
       }
 
+      // 12-month chart (uses last ~365 days based on ISO date labels)
+      // If you run daily, this will work once you have enough points.
+      const parsed = labels.map((lab, i) => ({ lab, i, d: safeDateParse(lab), v: series[i] }))
+                           .filter(x => x.d && typeof x.v === "number");
+
+      const last = parsed[parsed.length - 1];
+      if (!last) {
+        oneYearStatus.textContent = "Could not parse date labels. Use ISO dates like YYYY-MM-DD.";
+      } else {
+        const cutoff = new Date(last.d.getTime() - 365 * 24 * 60 * 60 * 1000);
+        const lastYear = parsed.filter(x => x.d >= cutoff);
+
+        if (lastYear.length < 5) {
+          oneYearStatus.textContent = "Not enough data points yet for a 12-month chart. Keep running the Action daily.";
+          // Clear chart if previously drawn
+          if (oneYearChartInstance) { oneYearChartInstance.destroy(); oneYearChartInstance = null; }
+        } else {
+          oneYearStatus.textContent = `Showing ${lastYear.length} points from the last 12 months.`;
+          const oneCtx = document.getElementById("oneYearChart").getContext("2d");
+          if (oneYearChartInstance) oneYearChartInstance.destroy();
+
+          oneYearChartInstance = new Chart(oneCtx, {
+            type: "line",
+            data: {
+              labels: lastYear.map(x => x.lab),
+              datasets: [{
+                label: "Long-Term Fund (12M)",
+                data: lastYear.map(x => x.v),
+                borderWidth: 2,
+                tension: 0.25,
+                pointRadius: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: { legend: { position: "bottom" } },
+              scales: { y: { beginAtZero: false } }
+            }
+          });
+        }
+      }
+
+      // Pie chart (group tiny weights into "Other")
+      if (!holdings.length) {
+        pieStatus.textContent = "No holdings to chart yet.";
+        if (holdingsPieInstance) { holdingsPieInstance.destroy(); holdingsPieInstance = null; }
+      } else {
+        const MIN_SLICE = 0.02; // 2% threshold for individual slices
+        const sorted = [...holdings].sort((a,b) => (b.weight || 0) - (a.weight || 0));
+
+        const major = [];
+        let otherWeight = 0;
+
+        for (const h of sorted) {
+          const w = Number(h.weight) || 0;
+          if (w >= MIN_SLICE) major.push(h);
+          else otherWeight += w;
+        }
+
+        const pieLabels = major.map(h => h.ticker || h.name || "Holding");
+        const pieData = major.map(h => Number(h.weight) || 0);
+
+        if (otherWeight > 0.00001) {
+          pieLabels.push("Other");
+          pieData.push(otherWeight);
+        }
+
+        pieStatus.textContent = "Weights shown from holdings in data/performance.json (small positions grouped into Other).";
+
+        const pieCtx = document.getElementById("holdingsPie").getContext("2d");
+        if (holdingsPieInstance) holdingsPieInstance.destroy();
+
+        holdingsPieInstance = new Chart(pieCtx, {
+          type: "pie",
+          data: {
+            labels: pieLabels,
+            datasets: [{
+              data: pieData
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: "bottom" },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const val = context.raw || 0;
+                    return `${context.label}: ${(val * 100).toFixed(2)}%`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
     } catch (e) {
-      status.textContent = "Could not load auto data. Make sure data/performance.json exists and is deployed on GitHub Pages.";
+      ltStatus.textContent = "Could not load auto data. Make sure data/performance.json exists and is deployed on GitHub Pages.";
+      oneYearStatus.textContent = "Could not load 12-month view.";
+      pieStatus.textContent = "Could not load holdings allocation.";
       console.error(e);
     }
   }
