@@ -100,16 +100,14 @@
       Base assumption: $10,000 fully invested from inception. Values are shown as an index (start = 100).
     </p>
 
-    <!-- Long-Term Fund chart -->
+    <!-- Long-Term Fund chart (AUTO from data/performance.json) -->
     <div class="chart-wrapper">
-      <h2>Long-Term Fund </h2>
+      <h2>Long-Term Fund</h2>
       <canvas id="longTermChart"></canvas>
-      <p class="muted">
-        
-      </p>
+      <p class="muted" id="ltStatus">Loading data from <code>data/performance.json</code>…</p>
     </div>
 
-    <!-- Strategy chart: equities + forex -->
+    <!-- Strategy chart: equities + forex (MOCK) -->
     <div class="chart-wrapper">
       <h2>Equities vs Forex (Performance – Weekly)</h2>
       <canvas id="strategyChart"></canvas>
@@ -134,7 +132,7 @@
           <td>Long-Term Fund (Global ESG + Value)</td>
           <td id="ltLatest">—</td>
           <td id="ltChange">—</td>
-          <td>Global ESG equities + sustainable REITs + gold + broad commodities (mock).</td>
+          <td>Auto-updated from <code>data/performance.json</code> (mock).</td>
         </tr>
         <tr>
           <td>Equities Strategy</td>
@@ -151,7 +149,27 @@
       </tbody>
     </table>
 
-    <!-- Allocation Snapshot -->
+    <!-- FULL HOLDINGS TABLE (AUTO from data/performance.json -> holdings) -->
+    <h2 style="margin-top:28px;">Full Portfolio Holdings (Long-Term Fund)</h2>
+    <p class="muted" style="margin-top:6px;">
+      Auto-populated from <code>data/performance.json</code>. Your GitHub Action should write prices + weights here.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>Name</th>
+          <th>Weight</th>
+          <th>Latest Price</th>
+        </tr>
+      </thead>
+      <tbody id="holdingsBody">
+        <tr><td colspan="4" class="muted">Loading holdings…</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Allocation Snapshot (STATIC target sleeves) -->
     <table>
       <thead>
         <tr>
@@ -187,69 +205,106 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // -----------------------------
-  // Long-Term Fund: 24 months (mock)
-  // End ~ +32% over 2 years
-  // -----------------------------
-  const ltLabels = [
-    "Jan 2024","Feb 2024","Mar 2024","Apr 2024","May 2024","Jun 2024",
-    "Jul 2024","Aug 2024","Sep 2024","Oct 2024","Nov 2024","Dec 2024",
-    "Jan 2025","Feb 2025","Mar 2025","Apr 2025","May 2025","Jun 2025",
-    "Jul 2025","Aug 2025","Sep 2025","Oct 2025","Nov 2025","Dec 2025"
-  ];
+  // ---------------------------------------------
+  // Helpers
+  // ---------------------------------------------
+  function fmt(n) { return Number(n).toFixed(1); }
+  function fmtPct(p) { return (p >= 0 ? "+" : "") + Number(p).toFixed(1) + "%"; }
+  function pctChangeFrom100(latest) { return ((latest / 100.0) - 1) * 100; }
 
-  const longTermFundData = [
-    100.0, 101.2, 100.6, 102.5, 104.0, 103.4,
-    105.1, 106.0, 104.8, 107.2, 108.9, 111.0,
-    112.4, 114.0, 113.1, 116.2, 118.7, 117.5,
-    121.0, 123.8, 122.6, 126.4, 129.1, 132.1
-  ];
+  // ---------------------------------------------
+  // AUTO: Long-Term Fund + Holdings from data/performance.json
+  // ---------------------------------------------
+  let longTermChartInstance = null;
 
-  new Chart(document.getElementById("longTermChart").getContext("2d"), {
-    type: "line",
-    data: {
-      labels: ltLabels,
-      datasets: [{
-        label: "Long-Term Fund (Index)",
-        data: longTermFundData,
-        borderWidth: 2,
-        tension: 0.25,
-        pointRadius: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: "bottom" } },
-      scales: { y: { beginAtZero: false } }
+  async function loadLongTermFromJSON() {
+    const status = document.getElementById("ltStatus");
+
+    try {
+      const res = await fetch("data/performance.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("Could not load data/performance.json");
+      const perf = await res.json();
+
+      const labels = Array.isArray(perf.labels) ? perf.labels : [];
+      const series = Array.isArray(perf.longTermIndex) ? perf.longTermIndex : [];
+
+      // If Action hasn't written data yet:
+      if (labels.length === 0 || series.length === 0) {
+        status.textContent = "No long-term fund data yet. Run the GitHub Action once to populate data/performance.json.";
+        return;
+      }
+
+      status.textContent = "Auto-updated from data/performance.json";
+
+      // Chart
+      const ctx = document.getElementById("longTermChart").getContext("2d");
+      if (longTermChartInstance) longTermChartInstance.destroy();
+      longTermChartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: "Long-Term Fund (Index)",
+            data: series,
+            borderWidth: 2,
+            tension: 0.25,
+            pointRadius: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: "bottom" } },
+          scales: { y: { beginAtZero: false } }
+        }
+      });
+
+      // Summary row (Long-Term)
+      const ltLatest = series[series.length - 1];
+      document.getElementById("ltLatest").textContent = fmt(ltLatest);
+      const ltChange = ((ltLatest / series[0]) - 1) * 100;
+      document.getElementById("ltChange").textContent = fmtPct(ltChange);
+
+      // Holdings table
+      const tbody = document.getElementById("holdingsBody");
+      if (Array.isArray(perf.holdings) && perf.holdings.length > 0) {
+        tbody.innerHTML = perf.holdings.map(h => `
+          <tr>
+            <td>${h.ticker ?? "—"}</td>
+            <td>${h.name ?? "—"}</td>
+            <td>${((Number(h.weight) || 0) * 100).toFixed(2)}%</td>
+            <td>${(h.price != null && !Number.isNaN(Number(h.price))) ? "$" + Number(h.price).toFixed(2) : "—"}</td>
+          </tr>
+        `).join("");
+      } else {
+        tbody.innerHTML = `<tr><td colspan="4" class="muted">No holdings found in data/performance.json yet.</td></tr>`;
+      }
+
+    } catch (e) {
+      status.textContent = "Could not load auto data. Make sure data/performance.json exists and is deployed on GitHub Pages.";
+      console.error(e);
     }
-  });
+  }
 
-  // -----------------------------
-  // Weekly strategies: Equities vs Forex (mock)
-  // Requirements:
-  // - Equities: ~+5%/week avg, higher volatility
-  // - Forex: ~+4%/week avg, lower volatility
-  // - “Tariff regime” week: +20% step up
-  // -----------------------------
+  // ---------------------------------------------
+  // MOCK: Equities vs Forex (weekly)
+  // ---------------------------------------------
   const wLabels = [
     "W1","W2","W3","W4","W5","W6","W7","W8","W9","W10",
     "W11 (Tariffs)","W12","W13","W14","W15","W16","W17","W18","W19","W20"
   ];
 
-  // Equities: choppy with bigger dips/spikes, +20% step at W11
   const equitiesData = [
     100.0, 106.0, 103.0, 111.0, 116.0,
     112.0, 120.0, 125.0, 121.0, 128.0,
-    153.6,   // +20% step from 128.0 -> 153.6
+    153.6,
     160.0, 154.0, 166.0, 171.0,
     165.0, 176.0, 184.0, 179.0, 192.0
   ];
 
-  // Forex: smoother path, +20% step at W11 too (less volatility around it)
   const forexData = [
     100.0, 103.5, 104.8, 109.0, 112.2,
     114.6, 117.0, 119.9, 123.2, 126.0,
-    151.2,   // +20% step from 126.0 -> 151.2
+    151.2,
     155.0, 157.0, 160.2, 162.5,
     165.0, 167.2, 170.0, 172.1, 175.5
   ];
@@ -270,24 +325,18 @@
     }
   });
 
-  // -----------------------------
-  // Populate summary table automatically
-  // -----------------------------
-  function fmt(n) { return n.toFixed(1); }
-  function pctChange(latest) { return ((latest / 100.0) - 1) * 100; }
-
-  const ltLatest = longTermFundData[longTermFundData.length - 1];
+  // Summary rows (Equities + Forex)
   const eqLatest = equitiesData[equitiesData.length - 1];
   const fxLatest = forexData[forexData.length - 1];
 
-  document.getElementById("ltLatest").textContent = fmt(ltLatest);
-  document.getElementById("ltChange").textContent = (pctChange(ltLatest) >= 0 ? "+" : "") + pctChange(ltLatest).toFixed(1) + "%";
-
   document.getElementById("eqLatest").textContent = fmt(eqLatest);
-  document.getElementById("eqChange").textContent = (pctChange(eqLatest) >= 0 ? "+" : "") + pctChange(eqLatest).toFixed(1) + "%";
+  document.getElementById("eqChange").textContent = fmtPct(pctChangeFrom100(eqLatest));
 
   document.getElementById("fxLatest").textContent = fmt(fxLatest);
-  document.getElementById("fxChange").textContent = (pctChange(fxLatest) >= 0 ? "+" : "") + pctChange(fxLatest).toFixed(1) + "%";
+  document.getElementById("fxChange").textContent = fmtPct(pctChangeFrom100(fxLatest));
+
+  // Load Long-Term Fund from JSON (Step 4 output)
+  loadLongTermFromJSON();
 </script>
 
 </body>
