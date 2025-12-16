@@ -34,7 +34,6 @@
       background: #f7f6ec; border: 1px solid #d3d0c0; border-radius: 6px;
       padding: 16px 18px; margin-top: 25px;
     }
-    .chart-wrapper h2 { margin-top: 0; font-size: 1.1rem; }
     canvas { width: 100%; max-height: 360px; }
     .pie-wrap canvas { max-height: 320px; }
 
@@ -69,7 +68,7 @@
   <div class="header-inner">
     <div class="logo">
       <img src="logo.png" alt="Green Tree Capital Logo">
-      <div class="logo-text">Green Tree Capital</div>
+      <div class="logo-text">Green Bull Capital</div>
     </div>
 
     <nav>
@@ -88,46 +87,28 @@
 
     <h1>
       Fund Performance Overview
-      <span class="pill">Fictitious / Mock Track Record</span>
+      <span class="pill">12 Month Track Record</span>
     </h1>
 
-    <p>
-      This page shows the performance of Green Tree Capital strategies using an index format (Inception = 100).
-      The Long-Term Fund is a global ESG + value portfolio using equities, REITs, and commodities (including gold),
-      with awareness of FX exposure from international holdings.
-    </p>
-
     <p class="muted">
-      Base assumption: $10,000 fully invested from inception. Values are shown as an index (start = 100).
+      Data is pulled from <code>data/performance.json</code> (updated weekly by GitHub Actions).
     </p>
 
-    <div class="chart-wrapper">
-      <h2>Long-Term Fund (Full Track Record)</h2>
-      <canvas id="longTermChart"></canvas>
-      <p class="muted" id="ltStatus">Loading data from <code>data/performance.json</code>…</p>
-    </div>
-
+    <!-- ONE chart only: last 52 weeks -->
     <div class="chart-wrapper">
       <h2>Long-Term Fund (Past 12 Months — Weekly)</h2>
-      <canvas id="oneYearChart"></canvas>
-      <p class="muted" id="oneYearStatus">Loading 12-month view…</p>
+      <canvas id="longTermChart"></canvas>
+      <p class="muted" id="ltStatus">Loading…</p>
     </div>
 
+    <!-- PIE chart -->
     <div class="chart-wrapper pie-wrap">
       <h2>Long-Term Fund Allocation (Holdings by Weight)</h2>
       <canvas id="holdingsPie"></canvas>
-      <p class="muted" id="pieStatus">Loading holdings allocation…</p>
+      <p class="muted" id="pieStatus">Loading allocation…</p>
     </div>
 
-    <div class="chart-wrapper">
-      <h2>Equities vs Forex (Performance – Weekly)</h2>
-      <canvas id="strategyChart"></canvas>
-      <p class="muted">
-        Equities target ~+5%/week on average with higher volatility. Forex targets ~+4%/week on average with lower volatility.
-        A one-week “tariff regime” shock is shown as a +20% step up.
-      </p>
-    </div>
-
+    <!-- Summary -->
     <table>
       <thead>
         <tr>
@@ -139,27 +120,16 @@
       </thead>
       <tbody>
         <tr>
-          <td>Long-Term Fund (Global ESG + Value)</td>
+          <td>Long-Term Fund</td>
           <td id="ltLatest">—</td>
           <td id="ltChange">—</td>
-          <td>Auto-updated from <code>data/performance.json</code> (mock).</td>
-        </tr>
-        <tr>
-          <td>Equities Strategy</td>
-          <td id="eqLatest">—</td>
-          <td id="eqChange">—</td>
-          <td>Higher volatility profile; “tariff regime” week includes +20% step (mock).</td>
-        </tr>
-        <tr>
-          <td>Forex Strategy</td>
-          <td id="fxLatest">—</td>
-          <td id="fxChange">—</td>
-          <td>Lower volatility profile; also benefits from “tariff regime” volatility expansion (mock).</td>
+          <td>Auto-updated weekly from <code>data/performance.json</code>.</td>
         </tr>
       </tbody>
     </table>
 
-    <h2 style="margin-top:28px;">Full Portfolio Holdings (Long-Term Fund)</h2>
+    <!-- Holdings -->
+    <h2 style="margin-top:28px;">Full Portfolio Holdings</h2>
     <p class="muted" style="margin-top:6px;">
       Auto-populated from <code>data/performance.json</code>.
     </p>
@@ -179,8 +149,8 @@
     </table>
 
     <div class="disclaimer-box">
-      <strong>Disclosure:</strong> Performance figures and charts on this page are <strong>fictitious</strong> and for
-      educational/entertainment purposes only. They do not reflect audited results, actual trading, or any client performance.
+      <strong>Disclosure:</strong> Performance figures and charts on this page are for
+      educational/entertainment purposes only. They do not reflect audited results, or any client performance.
       Nothing here is investment advice.
     </div>
 
@@ -194,17 +164,15 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  function fmt(n) { return Number(n).toFixed(1); }
-  function fmtPct(p) { return (p >= 0 ? "+" : "") + Number(p).toFixed(1) + "%"; }
-  function pctChangeFrom100(latest) { return ((latest / 100.0) - 1) * 100; }
-
   let longTermChartInstance = null;
-  let oneYearChartInstance = null;
   let holdingsPieInstance = null;
 
-  async function loadLongTermFromJSON() {
+  function lastN(arr, n) { return arr.slice(Math.max(arr.length - n, 0)); }
+  function fmt(n) { return Number(n).toFixed(1); }
+  function fmtPct(p) { return (p >= 0 ? "+" : "") + Number(p).toFixed(1) + "%"; }
+
+  async function loadFromJSON() {
     const ltStatus = document.getElementById("ltStatus");
-    const oneYearStatus = document.getElementById("oneYearStatus");
     const pieStatus = document.getElementById("pieStatus");
 
     try {
@@ -212,19 +180,20 @@
       if (!res.ok) throw new Error("Could not load data/performance.json");
       const perf = await res.json();
 
-      const labels = Array.isArray(perf.labels) ? perf.labels : [];
-      const series = Array.isArray(perf.longTermIndex) ? perf.longTermIndex : [];
+      const labelsAll = Array.isArray(perf.labels) ? perf.labels : [];
+      const seriesAll = Array.isArray(perf.longTermIndex) ? perf.longTermIndex : [];
 
-      if (!labels.length || !series.length) {
-        ltStatus.textContent = "No long-term fund data yet. Run the GitHub Action to populate data/performance.json.";
-        oneYearStatus.textContent = "No data yet.";
-        pieStatus.textContent = "No holdings data yet.";
+      if (!labelsAll.length || !seriesAll.length) {
+        ltStatus.textContent = "No data yet. Run the workflow once.";
         return;
       }
 
-      ltStatus.textContent = "Auto-updated from data/performance.json";
+      // Only show last 52 weekly points
+      const labels = lastN(labelsAll, 52);
+      const series = lastN(seriesAll, 52);
 
-      // Full track record chart
+      ltStatus.textContent = `Showing last ${labels.length} weekly points (~12 months).`;
+
       const ctx = document.getElementById("longTermChart").getContext("2d");
       if (longTermChartInstance) longTermChartInstance.destroy();
       longTermChartInstance = new Chart(ctx, {
@@ -246,45 +215,15 @@
         }
       });
 
-      // Summary row (Long-Term)
-      const ltLatest = series[series.length - 1];
-      document.getElementById("ltLatest").textContent = fmt(ltLatest);
-      const ltChange = ((ltLatest / series[0]) - 1) * 100;
-      document.getElementById("ltChange").textContent = fmtPct(ltChange);
+      // Summary (use perf.latest if present, else last series)
+      const latest = perf.latest?.index ?? seriesAll[seriesAll.length - 1];
+      const first = seriesAll[0] ?? 100;
+      const change = ((latest / first) - 1) * 100;
 
-      // Past 12 months (weekly): last 52 points
-      const N = Math.min(52, series.length);
-      if (N < 5) {
-        oneYearStatus.textContent = "Not enough weekly points yet (need at least ~5). Keep running weekly.";
-        if (oneYearChartInstance) { oneYearChartInstance.destroy(); oneYearChartInstance = null; }
-      } else {
-        oneYearStatus.textContent = `Showing last ${N} weekly points (~12 months).`;
-        const oneLabels = labels.slice(-N);
-        const oneSeries = series.slice(-N);
+      document.getElementById("ltLatest").textContent = fmt(latest);
+      document.getElementById("ltChange").textContent = fmtPct(change);
 
-        const oneCtx = document.getElementById("oneYearChart").getContext("2d");
-        if (oneYearChartInstance) oneYearChartInstance.destroy();
-        oneYearChartInstance = new Chart(oneCtx, {
-          type: "line",
-          data: {
-            labels: oneLabels,
-            datasets: [{
-              label: "Long-Term Fund (12M Weekly)",
-              data: oneSeries,
-              borderWidth: 2,
-              tension: 0.25,
-              pointRadius: 2
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: { legend: { position: "bottom" } },
-            scales: { y: { beginAtZero: false } }
-          }
-        });
-      }
-
-      // Holdings table + Pie
+      // Holdings table
       const holdings = Array.isArray(perf.holdings) ? perf.holdings : [];
       const tbody = document.getElementById("holdingsBody");
 
@@ -297,13 +236,18 @@
             <td>${(h.price != null && !Number.isNaN(Number(h.price))) ? "$" + Number(h.price).toFixed(2) : "—"}</td>
           </tr>
         `).join("");
+      } else {
+        tbody.innerHTML = `<tr><td colspan="4" class="muted">No holdings found in data/performance.json.</td></tr>`;
+      }
 
-        // Pie chart (group small slices)
+      // Pie chart (group tiny weights into Other)
+      if (holdings.length > 0) {
         const MIN_SLICE = 0.02; // 2%
         const sorted = [...holdings].sort((a,b) => (b.weight || 0) - (a.weight || 0));
 
         const major = [];
         let otherWeight = 0;
+
         for (const h of sorted) {
           const w = Number(h.weight) || 0;
           if (w >= MIN_SLICE) major.push(h);
@@ -312,9 +256,13 @@
 
         const pieLabels = major.map(h => h.ticker || h.name || "Holding");
         const pieData = major.map(h => Number(h.weight) || 0);
-        if (otherWeight > 0.00001) { pieLabels.push("Other"); pieData.push(otherWeight); }
 
-        pieStatus.textContent = "Weights from holdings (small positions grouped into Other).";
+        if (otherWeight > 0.00001) {
+          pieLabels.push("Other");
+          pieData.push(otherWeight);
+        }
+
+        pieStatus.textContent = "Weights from holdings.json (small positions grouped into Other).";
 
         const pieCtx = document.getElementById("holdingsPie").getContext("2d");
         if (holdingsPieInstance) holdingsPieInstance.destroy();
@@ -333,69 +281,18 @@
             }
           }
         });
-
       } else {
-        tbody.innerHTML = `<tr><td colspan="4" class="muted">No holdings found in data/performance.json yet.</td></tr>`;
         pieStatus.textContent = "No holdings to chart yet.";
-        if (holdingsPieInstance) { holdingsPieInstance.destroy(); holdingsPieInstance = null; }
       }
 
     } catch (e) {
-      ltStatus.textContent = "Could not load auto data. Make sure data/performance.json exists and is deployed on GitHub Pages.";
-      oneYearStatus.textContent = "Could not load 12-month view.";
-      pieStatus.textContent = "Could not load holdings allocation.";
+      ltStatus.textContent = "Could not load data. Make sure data/performance.json exists and is deployed.";
+      pieStatus.textContent = "Could not load allocation.";
       console.error(e);
     }
   }
 
-  // MOCK: Equities vs Forex (weekly)
-  const wLabels = [
-    "W1","W2","W3","W4","W5","W6","W7","W8","W9","W10",
-    "W11 (Tariffs)","W12","W13","W14","W15","W16","W17","W18","W19","W20"
-  ];
-
-  const equitiesData = [
-    100.0, 106.0, 103.0, 111.0, 116.0,
-    112.0, 120.0, 125.0, 121.0, 128.0,
-    153.6, 160.0, 154.0, 166.0, 171.0,
-    165.0, 176.0, 184.0, 179.0, 192.0
-  ];
-
-  const forexData = [
-    100.0, 103.5, 104.8, 109.0, 112.2,
-    114.6, 117.0, 119.9, 123.2, 126.0,
-    151.2, 155.0, 157.0, 160.2, 162.5,
-    165.0, 167.2, 170.0, 172.1, 175.5
-  ];
-
-  new Chart(document.getElementById("strategyChart").getContext("2d"), {
-    type: "line",
-    data: {
-      labels: wLabels,
-      datasets: [
-        { label: "Equities (Index)", data: equitiesData, borderWidth: 2, tension: 0.35, pointRadius: 2 },
-        { label: "Forex (Index)", data: forexData, borderWidth: 2, tension: 0.2,  pointRadius: 2 }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: "bottom" } },
-      scales: { y: { beginAtZero: false } }
-    }
-  });
-
-  // Summary rows (Equities + Forex)
-  const eqLatest = equitiesData[equitiesData.length - 1];
-  const fxLatest = forexData[forexData.length - 1];
-
-  document.getElementById("eqLatest").textContent = fmt(eqLatest);
-  document.getElementById("eqChange").textContent = fmtPct(pctChangeFrom100(eqLatest));
-
-  document.getElementById("fxLatest").textContent = fmt(fxLatest);
-  document.getElementById("fxChange").textContent = fmtPct(pctChangeFrom100(fxLatest));
-
-  // Load Long-Term Fund from JSON (Step 4 output)
-  loadLongTermFromJSON();
+  loadFromJSON();
 </script>
 
 </body>
