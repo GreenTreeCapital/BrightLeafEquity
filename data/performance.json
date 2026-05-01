@@ -2,7 +2,6 @@
   "baseCurrency": "USD",
   "baseIndex": 100,
   "labels": [
-    "2025-05-02",
     "2025-05-09",
     "2025-05-16",
     "2025-05-23",
@@ -53,216 +52,217 @@
     "2026-04-03",
     "2026-04-10",
     "2026-04-17",
-    "2026-04-24"
+    "2026-04-24",
+    "2026-05-01"
   ],
   "longTermIndex": [
     100,
-    99.7965,
-    103.3318,
-    101.8345,
-    103.4885,
-    105.4594,
-    105.7454,
-    105.1499,
-    108.8035,
-    110.3661,
-    110.3654,
-    110.075,
-    111.0188,
-    108.1705,
-    111.6578,
-    112.6786,
-    112.5619,
-    112.5604,
-    114.0219,
-    116.5293,
-    119.9548,
-    120.1059,
-    123.3606,
-    119.9325,
-    123.6407,
-    125.1565,
-    126.6121,
-    123.6406,
-    124.0998,
-    120.5634,
-    125.8966,
-    126.2843,
-    125.6506,
-    125.5454,
-    128.2025,
-    128.2097,
-    131.9764,
-    133.0821,
-    134.5802,
-    132.5961,
-    131.9065,
-    130.9668,
-    133.1876,
-    132.6059,
-    127.8352,
-    126.8367,
-    122.7946,
-    120.1017,
-    124.4207,
-    130.7201,
-    136.2006,
-    137.4233
+    103.5427,
+    102.0655,
+    103.7099,
+    105.694,
+    105.9891,
+    105.3921,
+    109.0716,
+    110.6344,
+    110.6281,
+    110.3492,
+    111.2842,
+    108.4408,
+    111.9489,
+    112.9724,
+    112.8276,
+    112.8195,
+    114.2909,
+    116.8077,
+    120.2586,
+    120.4072,
+    123.6696,
+    120.247,
+    123.9183,
+    125.434,
+    126.9106,
+    123.9114,
+    124.3874,
+    120.8125,
+    126.1687,
+    126.5607,
+    125.9126,
+    125.8169,
+    128.4856,
+    128.4885,
+    132.2772,
+    133.3698,
+    134.9067,
+    132.891,
+    132.1656,
+    131.2093,
+    133.4325,
+    132.8418,
+    128.0797,
+    127.0856,
+    123.0279,
+    120.3114,
+    124.6379,
+    130.9619,
+    136.445,
+    137.6911,
+    138.0273
   ],
   "latest": {
-    "index": 137.42,
-    "changePct": 37.42
+    "index": 138.03,
+    "changePct": 38.03
   },
   "holdings": [
     {
       "ticker": "AAPL",
       "name": "Apple",
       "weight": 0.07,
-      "price": 271.06
+      "price": 280.14
     },
     {
       "ticker": "MSFT",
       "name": "Microsoft",
       "weight": 0.08,
-      "price": 424.62
+      "price": 414.44
     },
     {
       "ticker": "NVDA",
       "name": "NVIDIA",
       "weight": 0.07,
-      "price": 208.27
+      "price": 198.45
     },
     {
       "ticker": "GOOGL",
       "name": "Alphabet",
       "weight": 0.04,
-      "price": 344.4
+      "price": 385.69
     },
     {
       "ticker": "AMZN",
       "name": "Amazon",
       "weight": 0.04,
-      "price": 263.99
+      "price": 268.26
     },
     {
       "ticker": "UNH",
       "name": "UnitedHealth",
       "weight": 0.02,
-      "price": 354.92
+      "price": 368.815
     },
     {
       "ticker": "JPM",
       "name": "JPMorgan",
       "weight": 0.02,
-      "price": 308.28
+      "price": 312.47
     },
     {
       "ticker": "COST",
       "name": "Costco",
       "weight": 0.01,
-      "price": 1011.15
+      "price": 1011.7
     },
     {
       "ticker": "NVO",
       "name": "Novo Nordisk",
       "weight": 0.05,
-      "price": 41.17
+      "price": 43.88
     },
     {
       "ticker": "TSM",
       "name": "Taiwan Semi",
       "weight": 0.05,
-      "price": 402.46
+      "price": 396.06
     },
     {
       "ticker": "ASML",
       "name": "ASML",
       "weight": 0.03,
-      "price": 1457.7
+      "price": 1438.99
     },
     {
       "ticker": "NSRGY",
       "name": "Nestle",
       "weight": 0.02,
-      "price": 103.26
+      "price": 101.48
     },
     {
       "ticker": "TM",
       "name": "Toyota",
       "weight": 0.02,
-      "price": 192.32
+      "price": 188.71
     },
     {
       "ticker": "SIEGY",
       "name": "Siemens",
       "weight": 0.015,
-      "price": 143.47
+      "price": 148.74
     },
     {
       "ticker": "SAP",
       "name": "SAP",
       "weight": 0.015,
-      "price": 175.26
+      "price": 169.49
     },
     {
       "ticker": "SPY",
       "name": "S&P 500 ETF",
       "weight": 0.08,
-      "price": 713.94
+      "price": 720.65
     },
     {
       "ticker": "EEM",
       "name": "Emerging Markets ETF",
       "weight": 0.05,
-      "price": 63.74
+      "price": 64.13
     },
     {
       "ticker": "INDA",
       "name": "India ETF",
       "weight": 0.02,
-      "price": 49.58
+      "price": 49.12
     },
     {
       "ticker": "ICLN",
       "name": "Clean Energy ETF",
       "weight": 0.05,
-      "price": 19.99
+      "price": 20.77
     },
     {
       "ticker": "TAN",
       "name": "Solar ETF",
       "weight": 0.03,
-      "price": 58.32
+      "price": 59.27
     },
     {
       "ticker": "LIT",
       "name": "Battery Metals ETF",
       "weight": 0.02,
-      "price": 83.79
+      "price": 88.72
     },
     {
       "ticker": "GLD",
       "name": "Gold ETF",
       "weight": 0.05,
-      "price": 433.25
+      "price": 423.18
     },
     {
       "ticker": "SLV",
       "name": "Silver ETF",
       "weight": 0.05,
-      "price": 68.79
+      "price": 66.66
     },
     {
       "ticker": "VNQ",
       "name": "REIT ETF",
       "weight": 0.025,
-      "price": 95.3
+      "price": 96.06
     },
     {
       "ticker": "PLD",
       "name": "Prologis",
       "weight": 0.01,
-      "price": 142.1
+      "price": null
     },
     {
       "ticker": "DLR",
@@ -278,6 +278,6 @@
     }
   ],
   "_historySource": "AlphaVantage: TIME_SERIES_WEEKLY_ADJUSTED",
-  "_historyAsOfFridayUTC": "2026-04-24",
-  "_baselinePortfolioPrice": 208.453086
+  "_historyAsOfFridayUTC": "2026-05-01",
+  "_baselinePortfolioPrice": 206.934835
 }
